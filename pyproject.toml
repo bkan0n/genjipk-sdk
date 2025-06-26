@@ -1,0 +1,23 @@
+[project]
+name = "genjipk-sdk"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "tylovejoy", email = "48333668+tylovejoy@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "hatchling>=1.27.0",
+    "msgspec>=0.19.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.29.4",
+    "ruff>=0.12.0",
+]
