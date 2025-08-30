@@ -1,128 +1,368 @@
 import datetime
-import re
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Literal
 
 import msgspec
+from msgspec import UNSET, Struct, UnsetType, ValidationError
+
+from genjipk_sdk.utilities.lootbox import sanitize_string
 
 from ..utilities import difficulties
-from ..utilities.types import MapCategory, Mechanics, OverwatchCode, OverwatchMap, Restrictions
+from ..utilities.maps import get_map_banner
+from ..utilities.types import (
+    GuideURL,
+    MapCategory,
+    Mechanics,
+    OverwatchCode,
+    OverwatchMap,
+    PlaytestStatus,
+    Restrictions,
+)
+from .users import Creator, CreatorFull
 
-# All possible map attrs
-
-
-# code: OverwatchCode  # noqa: ERA001
-# name: OverwatchMap  # noqa: ERA001
-# category: list[MapCategory]  # noqa: ERA001
-# primary_creator_id: int  # noqa: ERA001
-# checkpoints: int  # noqa: ERA001
-# difficulty: float  # noqa: ERA001
-# playtest_id: Optional[int] = None  # noqa: ERA001
-# official: bool = True  # noqa: ERA001
-# playtesting: bool = True  # noqa: ERA001
-# archived: bool = False  # noqa: ERA001
-# secondary_creator_id: Optional[int] = None  # noqa: ERA001
-# tertiary_creator_id: Optional[int] = None  # noqa: ERA001
-# description: Optional[str] = None  # noqa: ERA001
-# mechanics: list[Mechanics] = []  # noqa: ERA001
-# restrictions: list[restrictions] = []  # noqa: ERA001
-# giudes  # noqa: ERA001
-# gold: float = 0  # noqa: ERA001
-# silver: float = 0  # noqa: ERA001
-# bronze: float = 0  # noqa: ERA001
-PlaytestStatus = Literal["Approved", "In Progress", "Rejected"]
+MAX_CREATORS = 3
 
 
-class BaseMap(msgspec.Struct, kw_only=True):
+class Medals(msgspec.Struct):
+    gold: float
+    silver: float
+    bronze: float
+
+    def __post_init__(self) -> None:
+        """Validate medals.
+
+        All medals must be present and be in order.
+        """
+        if not (self.bronze > self.silver > self.gold):
+            raise ValidationError("Bronze medal must be larger than silver, and silver larger than gold.")
+
+
+class Guide(msgspec.Struct):
+    url: GuideURL
+    user_id: int
+
+
+class GuideFull(Guide):
+    usernames: list[str] = []
+
+
+class MapCreateDTO(msgspec.Struct):
     code: OverwatchCode
-    name: OverwatchMap
+    map_name: OverwatchMap
     category: MapCategory
-    creator_ids: list[int]
+    creators: Annotated[list[Creator], msgspec.Meta(max_length=3)]
     checkpoints: Annotated[int, msgspec.Meta(gt=0)]
-    difficulty: difficulties.DifficultyT
-    hidden: bool = False
-    raw_difficulty: Optional[Annotated[float, msgspec.Meta(gt=0, lt=10)]] = None
+    difficulty: difficulties.DifficultyAll
+    official: bool = True
+    hidden: bool = True
+    playtesting: PlaytestStatus = "In Progress"
     archived: bool = False
     mechanics: list[Mechanics] = []
     restrictions: list[Restrictions] = []
-    description: Optional[str] = None
-    gold: Optional[float] = None
-    silver: Optional[float] = None
-    bronze: Optional[float] = None
-    map_banner: str = ""
-
-    def __post_init__(self) -> None:
-        """Validate extra fields."""
-        if self.raw_difficulty is None:
-            self.raw_difficulty = difficulties.DIFFICULTY_MIDPOINTS[self.difficulty]
-        _map = re.sub(r"[^a-zA-Z0-9]", "", self.name)
-        sanitized_name = _map.lower().strip().replace(" ", "")
-        self.map_banner = f"https://bkan0n.com/assets/images/map_banners/{sanitized_name}.png"
+    description: str | None = None
+    medals: Medals | None = None
+    guide_url: GuideURL | None = None
+    title: str | None = None
+    custom_banner: str | None = None
 
     @property
     def primary_creator_id(self) -> int:
-        """Get the primary creator.
-
-        It will always be the first index in self.creator_ids.
-        """
-        return self.creator_ids[0]
-
-    @property
-    def medals(self) -> bool:
-        """Get the truthy value of medals."""
-        return all((self.gold, self.silver, self.bronze))
+        """Get the primary creator."""
+        res = next((element for element in self.creators if element.is_primary), None)
+        if not res:
+            raise ValueError("No primary creator found.")
+        return res.id
 
 
-class PlaytestMetaSubmission(msgspec.Struct):
+class MapPatchDTO(msgspec.Struct, kw_only=True):
+    code: OverwatchCode | UnsetType = UNSET
+    map_name: OverwatchMap | UnsetType = UNSET
+    category: MapCategory | UnsetType = UNSET
+    creators: list[Creator] | UnsetType = UNSET
+    checkpoints: Annotated[int, msgspec.Meta(gt=0)] | UnsetType = UNSET
+    difficulty: difficulties.DifficultyAll | UnsetType = UNSET
+    hidden: bool | UnsetType = UNSET
+    official: bool | UnsetType = UNSET
+    playtesting: PlaytestStatus | UnsetType = UNSET
+    archived: bool | UnsetType = UNSET
+    mechanics: list[Mechanics] | UnsetType | None = UNSET
+    restrictions: list[Restrictions] | UnsetType | None = UNSET
+    description: str | UnsetType | None = UNSET
+    medals: Medals | UnsetType | None = UNSET
+    title: str | UnsetType | None = UNSET
+    custom_banner: str | UnsetType | None = UNSET
+
+
+class ArchivalStatusPatchDTO(msgspec.Struct):
+    codes: list[OverwatchCode]
+    status: Literal["Archive", "Unarchived"]
+
+
+class MapReadPlaytestDTO(msgspec.Struct):
     thread_id: int
-    initial_difficulty: difficulties.DifficultyT
-    map_id: Optional[int] = None
-    code: Optional[OverwatchCode] = None
+    vote_average: float | None
+    vote_count: int | None
+    voters: list[int] | None
+    verification_id: int | None
+    initial_difficulty: float
+    completed: bool
+
+
+class MapReadDTO(msgspec.Struct):
+    id: int
+    code: OverwatchCode
+    map_name: OverwatchMap
+    category: MapCategory
+    creators: list[CreatorFull]
+    checkpoints: Annotated[int, msgspec.Meta(gt=0)]
+    difficulty: difficulties.DifficultyAll
+    official: bool
+    playtesting: PlaytestStatus
+    archived: bool
+    hidden: bool
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    ratings: float | None
+    playtest: MapReadPlaytestDTO | None
+    guides: list[GuideURL] | None = None
+    raw_difficulty: Annotated[float, msgspec.Meta(gt=0, lt=10)] | None = None
+    mechanics: list[Mechanics] = []
+    restrictions: list[Restrictions] = []
+    description: str | None = None
+    medals: Medals | None = None
+    title: str | None = None
+    map_banner: str | None = ""
 
     def __post_init__(self) -> None:
-        """Validate additional fields."""
-        if not (self.code or self.map_id):
-            raise ValueError("map_id or code must be provided.")
+        """Post init."""
+        self.creators.sort(key=lambda c: not c.is_primary)
+        if not self.map_banner:
+            self.map_banner = get_map_banner(self.map_name)
+
+    @property
+    def primary_creator_id(self) -> int:
+        """Get the primary creator."""
+        res = next((element for element in self.creators if element.is_primary), None)
+        if not res:
+            raise ValueError("No primary creator found.")
+        return res.id
+
+    @property
+    def primary_creator_name(self) -> str:
+        """Get the primary creator."""
+        res = next((element for element in self.creators if element.is_primary), None)
+        if not res:
+            raise ValueError("No primary creator found.")
+        return res.name
 
 
-class MessageQueueCreatePlaytest(msgspec.Struct):
-    map_id: int
+class PlaytestCreatePartialDTO(msgspec.Struct):
+    code: OverwatchCode
+    initial_difficulty: difficulties.DifficultyAll
 
 
-class PartialPlaytestResponse(msgspec.Struct, kw_only=True):
+class PlaytestAssociateIDThread(msgspec.Struct):
+    playtest_id: int
+    thread_id: int
+
+
+class PlaytestCreateDTO(msgspec.Struct):
+    code: OverwatchCode
+    thread_id: int
+    initial_difficulty: difficulties.DifficultyAll
+
+
+class PlaytestReadDTO(msgspec.Struct):
+    id: int
+    thread_id: int | None
+    code: OverwatchCode
+    verification_id: int | None
+    initial_difficulty: float
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    completed: bool
+    thread_creation_status: Literal["pending", "processing", "success", "failed"] | None = None
+    thread_creation_failure_reason: str | None = None
+    thread_creation_last_attempt_at: datetime.datetime | None = None
+
+
+class PlaytestPatchDTO(msgspec.Struct):
+    thread_id: int | UnsetType = UNSET
+    verification_id: int | UnsetType = UNSET
+    completed: bool | UnsetType = UNSET
+    thread_creation_status: Literal["pending", "processing", "success", "failed"] | msgspec.UnsetType = msgspec.UNSET
+    thread_creation_failure_reason: str | None | msgspec.UnsetType = msgspec.UNSET
+    thread_creation_last_attempt_at: datetime.datetime | msgspec.UnsetType = msgspec.UNSET
+
+
+class MapReadPartialDTO(msgspec.Struct):
     map_id: int
     code: OverwatchCode
-    difficulty: difficulties.DifficultyT
+    difficulty: difficulties.DifficultyAll
     creator_name: str
-    name: OverwatchMap
+    map_name: OverwatchMap
     checkpoints: int
 
     @property
     def thread_name(self) -> str:
         """Return the thread name."""
-        return f"{self.code} | {self.difficulty} {self.name} by {self.creator_name}"[:100]
+        return f"{self.code} | {self.difficulty} {self.map_name} by {self.creator_name}"[:100]
 
 
-class MapResponse(BaseMap, kw_only=True):
-    id: int
-    official: bool
-    playtesting: PlaytestStatus
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    creator_is_primary_flags: list[bool]
-    creator_names: list[str]
-    guide_urls: list[str] | None = None
-    thread_id: int
-    ratings: float | None
-    playtest_vote_average: float | None
-    playtest_vote_count: int | None
-    playtest_voters: list[int] | None
-    verification_id: int | None
-    initial_difficulty: float
-    playtest_created_at: datetime.datetime
-    playtest_updated_at: datetime.datetime
-    playtest_completed: bool
+class MessageQueueCreatePlaytest(msgspec.Struct):
+    code: OverwatchCode
+    playtest_id: int
 
 
 class PlaytestVote(msgspec.Struct):
-    map_id: int
+    code: OverwatchCode
     difficulty: float
+
+
+class PlaytestVoteWithUser(msgspec.Struct):
+    user_id: int
+    name: str
+    difficulty: float
+
+
+class PlaytestVotesAll(msgspec.Struct):
+    votes: list[PlaytestVoteWithUser]
+    average: float | None
+
+
+class MapMasteryCreateDTO(msgspec.Struct):
+    user_id: int
+    map_name: OverwatchMap
+    level: str
+
+
+class MapMasteryCreateReturnDTO(msgspec.Struct):
+    map_name: OverwatchMap
+    medal: str
+    operation_status: Literal["inserted", "updated"]
+
+
+class MapMasteryData(msgspec.Struct):
+    map_name: OverwatchMap
+    amount: int
+    level: str | None = None
+    icon_url: str | None = None
+
+    def __post_init__(self) -> None:
+        """Post init."""
+        self.level = self._level()
+        self.icon_url = self._icon_url()
+
+    def _level(self) -> str:
+        thresholds = [
+            (0, "Placeholder"),
+            (5, "Rookie"),
+            (10, "Explorer"),
+            (15, "Trailblazer"),
+            (20, "Pathfinder"),
+            (25, "Specialist"),
+            (30, "Prodigy"),
+        ]
+
+        icon_name = "Placeholder"
+        for threshold, name in thresholds:
+            if self.amount >= threshold:
+                icon_name = name
+        return icon_name
+
+    def _icon_url(self) -> str:
+        _sanitized_map_name = sanitize_string(self.map_name)
+        assert self.level
+        _lowered_level = self.level.lower()
+        return f"assets/mastery/{_sanitized_map_name}_{_lowered_level}.webp"
+
+
+class PlaytestApprove(msgspec.Struct):
+    code: str
+    thread_id: int
+    difficulty: difficulties.DifficultyAll
+    verifier_id: int
+    primary_creator_id: int | None
+
+
+class PlaytestForceAccept(msgspec.Struct):
+    code: str
+    thread_id: int
+    difficulty: difficulties.DifficultyAll
+    verifier_id: int
+    primary_creator_id: int | None
+
+
+class PlaytestForceDeny(msgspec.Struct):
+    code: str
+    thread_id: int
+    verifier_id: int
+    reason: str
+    primary_creator_id: int | None
+
+
+class PlaytestReset(msgspec.Struct):
+    code: str
+    thread_id: int
+    verifier_id: int
+    reason: str
+    remove_votes: bool
+    remove_completions: bool
+    primary_creator_id: int | None
+
+
+class PlaytestVoteCast(msgspec.Struct):
+    """Emitted after a vote is inserted/updated in the DB.
+
+    Attributes:
+        code: Map code (e.g., "OW-ABCD").
+        thread_id: Discord thread ID for the playtest.
+        voter_id: Discord user ID of the voter.
+        difficulty_value: Numeric midpoint (e.g., from DIFFICULTY_MIDPOINTS).
+    """
+
+    code: OverwatchCode
+    thread_id: int
+    voter_id: int
+    difficulty_value: float
+
+
+class PlaytestVoteRemoved(msgspec.Struct):
+    """Emitted after a user's vote is deleted.
+
+    Attributes:
+        thread_id: Discord thread ID for the playtest.
+        voter_id: Discord user ID whose vote was removed.
+    """
+
+    thread_id: int
+    voter_id: int
+
+
+class MapCompletionStatisticsResponse(Struct):
+    min: float | None = None
+    max: float | None = None
+    avg: float | None = None
+
+
+class MapPerDifficultyStatisticsResponse(Struct):
+    difficulty: difficulties.DifficultyTop
+    amount: int
+
+
+class PopularMapsStatisticsResponse(Struct):
+    code: OverwatchCode
+    completions: int
+    quality: float
+    difficulty: difficulties.DifficultyTop
+    ranking: int
+
+
+class TopCreatorsResponse(Struct):
+    map_count: int
+    name: str
+    average_quality: float
+
+
+class MapCountsResponse(Struct):
+    map_name: OverwatchMap
+    amount: int

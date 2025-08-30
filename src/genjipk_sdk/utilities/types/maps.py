@@ -95,6 +95,7 @@ OverwatchMap = Literal[
     "Ecopoint: Antarctica (Winter)",
     "Numbani",
     "Adlersbrunn",
+    "Aatlis",
 ]
 
 Mechanics = Literal[
@@ -132,3 +133,7 @@ Restrictions = Literal[
     "Double Jump",
     "Bhop",
 ]
+
+PlaytestStatus = Literal["Approved", "In Progress", "Rejected"]
+
+MedalType = Literal["Gold", "Silver", "Bronze"]

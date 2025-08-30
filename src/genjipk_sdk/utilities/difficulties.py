@@ -1,8 +1,19 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, TypeVar
 
-DifficultyT = Literal[
+from genjipk_sdk.utilities.types.ranks import Rank
+
+DifficultyTop = Literal[
+    "Easy",
+    "Medium",
+    "Hard",
+    "Very Hard",
+    "Extreme",
+    "Hell",
+]
+
+DifficultyAll = Literal[
     "Easy -",
     "Easy",
     "Easy +",
@@ -21,7 +32,9 @@ DifficultyT = Literal[
     "Hell",
 ]
 
-DIFFICULTY_RANGES_ALL: dict[DifficultyT, tuple[float, float]] = {
+D = TypeVar("D", DifficultyTop, DifficultyAll)
+
+DIFFICULTY_RANGES_ALL: dict[DifficultyAll, tuple[float, float]] = {
     "Easy -": (0.0, 1.18),  # Beginner has been removed completely, so Easy - has absorbed that range.
     "Easy": (1.18, 1.76),
     "Easy +": (1.76, 2.35),
@@ -40,7 +53,7 @@ DIFFICULTY_RANGES_ALL: dict[DifficultyT, tuple[float, float]] = {
     "Hell": (9.41, 10.0),
 }
 
-DIFFICULTY_RANGES_TOP: dict[DifficultyT, tuple[float, float]] = {
+DIFFICULTY_RANGES_TOP: dict[DifficultyTop, tuple[float, float]] = {
     "Easy": (0.0, 2.35),  # Beginner has been removed completely, so Easy has absorbed that range.
     "Medium": (2.35, 4.12),
     "Hard": (4.12, 5.88),
@@ -49,7 +62,7 @@ DIFFICULTY_RANGES_TOP: dict[DifficultyT, tuple[float, float]] = {
     "Hell": (9.41, 10.0),
 }
 
-DIFFICULTY_MIDPOINTS: dict[DifficultyT, float] = {
+DIFFICULTY_MIDPOINTS: dict[DifficultyAll, float] = {
     "Easy -": 0.89,  # Beginner removed completely, this midpoint ignores the old Beginner range.
     "Easy": 1.47,
     "Easy +": 2.06,
@@ -68,7 +81,7 @@ DIFFICULTY_MIDPOINTS: dict[DifficultyT, float] = {
     "Hell": 9.71,
 }
 
-DIFFICULTY_COLORS: dict[DifficultyT, str] = {
+DIFFICULTY_COLORS: dict[DifficultyAll, str] = {
     "Easy -": "#66ff66",
     "Easy": "#4dcc4d",
     "Easy +": "#33cc33",
@@ -87,15 +100,24 @@ DIFFICULTY_COLORS: dict[DifficultyT, str] = {
     "Hell": "#990000",
 }
 
+DIFFICULTY_TO_RANK_MAP: dict[DifficultyTop, Rank] = {
+    "Easy": "Jumper",
+    "Medium": "Skilled",
+    "Hard": "Pro",
+    "Very Hard": "Master",
+    "Extreme": "Grandmaster",
+    "Hell": "God",
+}
 
-def _convert_raw_difficulty(mapping: dict[DifficultyT, tuple[float, float]], raw_difficulty: float) -> DifficultyT:
+
+def _convert_raw_difficulty(mapping: dict[D, tuple[float, float]], raw_difficulty: float) -> D:
     for key, (low, high) in mapping.items():
         if low <= raw_difficulty < high:
             return key
     raise ValueError("Unknown difficulty")
 
 
-def convert_raw_difficulty_to_difficulty_all(raw_difficulty: float) -> DifficultyT:
+def convert_raw_difficulty_to_difficulty_all(raw_difficulty: float) -> DifficultyAll:
     """Convert raw difficulty (float) into a DifficultyT string.
 
     This will match for the extended list of difficulties (-, +).
@@ -103,7 +125,7 @@ def convert_raw_difficulty_to_difficulty_all(raw_difficulty: float) -> Difficult
     return _convert_raw_difficulty(DIFFICULTY_RANGES_ALL, raw_difficulty)
 
 
-def convert_raw_difficulty_to_difficulty_top(raw_difficulty: float) -> DifficultyT:
+def convert_raw_difficulty_to_difficulty_top(raw_difficulty: float) -> DifficultyTop:
     """Convert raw difficulty (float) into a DifficultyT string.
 
     This will match only the top difficulties (excludes - and +).
@@ -111,6 +133,6 @@ def convert_raw_difficulty_to_difficulty_top(raw_difficulty: float) -> Difficult
     return _convert_raw_difficulty(DIFFICULTY_RANGES_TOP, raw_difficulty)
 
 
-def convert_extended_difficulty_to_top_level(extended_difficulty: DifficultyT) -> DifficultyT:
+def convert_extended_difficulty_to_top_level(extended_difficulty: DifficultyAll) -> DifficultyTop:
     """Convert extended difficulty (+ and -) into a top level DifficultyT string (no - or +)."""
     return extended_difficulty.replace(" +", "").replace(" -", "")  # pyright: ignore [reportReturnType]
