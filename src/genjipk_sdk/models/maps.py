@@ -113,7 +113,7 @@ class MapReadDTO(msgspec.Struct):
     map_name: OverwatchMap
     category: MapCategory
     creators: list[CreatorFull]
-    checkpoints: Annotated[int, msgspec.Meta(ge=0)]
+    checkpoints: Annotated[int, msgspec.Meta(gt=0)]
     difficulty: difficulties.DifficultyAll
     official: bool
     playtesting: PlaytestStatus
@@ -124,13 +124,15 @@ class MapReadDTO(msgspec.Struct):
     ratings: float | None
     playtest: MapReadPlaytestDTO | None
     guides: list[GuideURL] | None = None
-    raw_difficulty: Annotated[float, msgspec.Meta(ge=0, lt=10)] | None = None
+    raw_difficulty: Annotated[float, msgspec.Meta(ge=0, le=10)] | None = None
     mechanics: list[Mechanics] = []
     restrictions: list[Restrictions] = []
     description: str | None = None
     medals: Medals | None = None
     title: str | None = None
     map_banner: str | None = ""
+    time: float | None = None
+    total_results: int | None = None
 
     def __post_init__(self) -> None:
         """Post init."""
