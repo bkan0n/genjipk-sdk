@@ -13,7 +13,6 @@ class CompletionCreateDTO(Struct):
     time: float
     screenshot: GuideURL
     video: GuideURL | None
-    completion: bool
 
 
 class CompletionReadDTO(Struct):
