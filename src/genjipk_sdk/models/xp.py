@@ -2,7 +2,7 @@ from typing import Literal
 
 from msgspec import Struct
 
-XP_TYPES = Literal["Map Submission", "Playtest", "Guide", "Completion", "Record", "World Record"]
+XP_TYPES = Literal["Map Submission", "Playtest", "Guide", "Completion", "Record", "World Record", "Other"]
 
 XP_AMOUNTS: dict[XP_TYPES, int] = {
     "Map Submission": 30,
