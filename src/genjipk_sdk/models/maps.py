@@ -278,66 +278,59 @@ class MapMasteryData(msgspec.Struct):
         return f"assets/mastery/{_sanitized_map_name}_{_lowered_level}.webp"
 
 
-class PlaytestApprove(msgspec.Struct):
-    code: str
-    thread_id: int
+class PlaytestApproveCreate(msgspec.Struct):
     difficulty: difficulties.DifficultyAll
     verifier_id: int
-    primary_creator_id: int | None
 
 
-class PlaytestForceAccept(msgspec.Struct):
-    code: str
+class PlaytestApproveMQ(PlaytestApproveCreate):
     thread_id: int
+
+
+class PlaytestForceAcceptCreate(msgspec.Struct):
     difficulty: difficulties.DifficultyAll
     verifier_id: int
-    primary_creator_id: int | None
 
 
-class PlaytestForceDeny(msgspec.Struct):
-    code: str
+class PlaytestForceAcceptMQ(PlaytestForceAcceptCreate):
     thread_id: int
+
+
+class PlaytestForceDenyCreate(msgspec.Struct):
     verifier_id: int
     reason: str
-    primary_creator_id: int | None
 
 
-class PlaytestReset(msgspec.Struct):
-    code: str
+class PlaytestForceDenyMQ(PlaytestForceDenyCreate):
     thread_id: int
+
+
+class PlaytestResetCreate(msgspec.Struct):
     verifier_id: int
     reason: str
     remove_votes: bool
     remove_completions: bool
-    primary_creator_id: int | None
 
 
-class PlaytestVoteCast(msgspec.Struct):
-    """Emitted after a vote is inserted/updated in the DB.
-
-    Attributes:
-        code: Map code (e.g., "OW-ABCD").
-        thread_id: Discord thread ID for the playtest.
-        voter_id: Discord user ID of the voter.
-        difficulty_value: Numeric midpoint (e.g., from DIFFICULTY_MIDPOINTS).
-    """
-
-    code: OverwatchCode
+class PlaytestResetMQ(PlaytestResetCreate):
     thread_id: int
+
+
+class PlaytestVoteCastCreate(msgspec.Struct):
     voter_id: int
     difficulty_value: float
 
 
-class PlaytestVoteRemoved(msgspec.Struct):
-    """Emitted after a user's vote is deleted.
-
-    Attributes:
-        thread_id: Discord thread ID for the playtest.
-        voter_id: Discord user ID whose vote was removed.
-    """
-
+class PlaytestVoteCastMQ(PlaytestVoteCastCreate):
     thread_id: int
+
+
+class PlaytestVoteRemovedCreate(msgspec.Struct):
     voter_id: int
+
+
+class PlaytestVoteRemovedMQ(PlaytestVoteRemovedCreate):
+    thread_id: int
 
 
 class MapCompletionStatisticsResponse(Struct):
