@@ -19,8 +19,6 @@ from .lootbox import (
 from .maps import (
     MAX_CREATORS,
     ArchivalStatusPatchDTO,
-    Creator,
-    CreatorFull,
     Guide,
     GuideFull,
     MapCompletionStatisticsResponse,
@@ -85,6 +83,8 @@ from .users import (
     NOTIFICATION_TYPES,
     USERNAME_REGEX,
     CommunityLeaderboardReadDTO,
+    Creator,
+    CreatorFull,
     Notification,
     OverwatchUsernameItem,
     OverwatchUsernamesReadDTO,
@@ -93,6 +93,7 @@ from .users import (
     SettingsUpdate,
     UserCreateDTO,
     UserReadDTO,
+    UserUpdateDTO,
 )
 from .xp import (
     XP_AMOUNTS,
@@ -197,6 +198,7 @@ __all__ = (
     "UserLootboxKeyAmountsResponse",
     "UserReadDTO",
     "UserRewardsResponse",
+    "UserUpdateDTO",
     "XpGrant",
     "XpGrantResult",
 )

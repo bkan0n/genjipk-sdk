@@ -2,7 +2,7 @@ import enum
 import re
 from typing import Literal
 
-from msgspec import Struct
+from msgspec import UNSET, Struct, UnsetType
 
 from genjipk_sdk.utilities.difficulties import DifficultyTop
 
@@ -81,6 +81,11 @@ class UserCreateDTO(Struct):
     id: int
     global_name: str
     nickname: str
+
+
+class UserUpdateDTO(Struct):
+    global_name: str | UnsetType = UNSET
+    nickname: str | UnsetType = UNSET
 
 
 class OverwatchUsernameItem(Struct):
