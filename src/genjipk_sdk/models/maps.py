@@ -2,7 +2,7 @@ import datetime
 from typing import Annotated, Literal
 
 import msgspec
-from msgspec import UNSET, Struct, UnsetType, ValidationError
+from msgspec import UNSET, Meta, Struct, UnsetType, ValidationError
 
 from genjipk_sdk.utilities.lootbox import sanitize_string
 
@@ -361,3 +361,7 @@ class TopCreatorsResponse(Struct):
 class MapCountsResponse(Struct):
     map_name: OverwatchMap
     amount: int
+
+
+class QualityValueDTO(Struct):
+    value: Annotated[int, Meta(ge=1, le=6)]

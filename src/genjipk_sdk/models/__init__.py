@@ -53,6 +53,7 @@ from .maps import (
     PlaytestVotesAll,
     PlaytestVoteWithUser,
     PopularMapsStatisticsResponse,
+    QualityValueDTO,
     TopCreatorsResponse,
 )
 from .newsfeed import (
@@ -184,6 +185,7 @@ __all__ = (
     "PlaytestVoteWithUser",
     "PlaytestVotesAll",
     "PopularMapsStatisticsResponse",
+    "QualityValueDTO",
     "RankCardBadgeSettings",
     "RankCardData",
     "RankCardDifficultiesData",
