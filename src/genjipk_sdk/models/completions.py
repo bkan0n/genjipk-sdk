@@ -34,6 +34,7 @@ class CompletionReadDTO(Struct):
     legacy_medal: str | None
     suspicious: bool
     total_results: int | None = None
+    upvotes: int = 0
 
 
 class CompletionSubmissionReadDTO(Struct):
