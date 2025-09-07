@@ -40,6 +40,7 @@ class NewsfeedNewMap(_TaggedPayload, tag="new_map", kw_only=True):
     difficulty: DifficultyAll
     creators: list[str]
     banner_url: str | None = None
+    official: bool = True
 
     def __post_init__(self) -> None:
         """Set the map banner dynamically."""
