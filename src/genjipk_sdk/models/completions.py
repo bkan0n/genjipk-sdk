@@ -92,11 +92,11 @@ SuspiciousFlag = Literal["Cheating", "Scripting"]
 
 
 class SuspiciousCompletionWriteDTO(Struct):
-    message_id: int | None
-    verification_id: int | None
     context: str
     flag_type: SuspiciousFlag
     flagged_by: int
+    message_id: int | None = None
+    verification_id: int | None = None
 
 
 class SuspiciousCompletionReadDTO(Struct):
