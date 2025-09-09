@@ -123,3 +123,9 @@ class MapRecordProgressionResponse(Struct):
 class TimePlayedPerRankResponse(Struct):
     total_seconds: float
     difficulty: DifficultyTop
+
+
+class UpvoteUpdateDTO(Struct):
+    user_id: int
+    message_id: int
+    upvote_message_id: int | None = None
