@@ -279,7 +279,6 @@ class MapMasteryData(msgspec.Struct):
 
 
 class PlaytestApproveCreate(msgspec.Struct):
-    difficulty: difficulties.DifficultyAll
     verifier_id: int
 
 
