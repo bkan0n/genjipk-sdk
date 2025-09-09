@@ -286,6 +286,7 @@ class PlaytestApproveMQ(PlaytestApproveCreate):
     difficulty: difficulties.DifficultyAll
     thread_id: int
     primary_creator_id: int
+    code: OverwatchCode
 
 
 class PlaytestForceAcceptCreate(msgspec.Struct):
