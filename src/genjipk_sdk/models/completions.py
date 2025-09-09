@@ -33,6 +33,7 @@ class CompletionReadDTO(Struct):
     legacy: bool
     legacy_medal: str | None
     suspicious: bool
+    wr_xp_check: bool
     total_results: int | None = None
     upvotes: int = 0
 
@@ -65,6 +66,7 @@ class CompletionPatchDTO(Struct):
     verification_id: int | UnsetType = UNSET
     legacy: bool | UnsetType = UNSET
     legacy_medal: str | None | UnsetType = UNSET
+    wr_xp_check: bool | UnsetType = UNSET
 
 
 class CompletionVerificationPutDTO(Struct):
