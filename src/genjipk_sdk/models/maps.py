@@ -367,3 +367,7 @@ class MapCountsResponse(Struct):
 
 class QualityValueDTO(Struct):
     value: Annotated[int, Meta(ge=1, le=6)]
+
+
+class XPMultiplierDTO(Struct):
+    value: Annotated[float, Meta(ge=1, le=10)]
