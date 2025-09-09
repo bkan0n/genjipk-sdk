@@ -109,6 +109,7 @@ class NewsfeedAnnouncement(_TaggedPayload, tag="announcement", kw_only=True):
     url: str | None
     banner_url: GuideURL | None
     thumbnail_url: GuideURL | None
+    from_bot: bool
 
 
 # Union of tagged payloads (now valid)
