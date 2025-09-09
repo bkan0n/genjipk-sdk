@@ -128,4 +128,3 @@ class TimePlayedPerRankResponse(Struct):
 class UpvoteUpdateDTO(Struct):
     user_id: int
     message_id: int
-    upvote_message_id: int | None = None
