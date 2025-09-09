@@ -8,6 +8,8 @@ from .completions import (
     MessageQueueCompletionsCreate,
     MessageQueueVerificationChange,
     TimePlayedPerRankResponse,
+    UpvoteCreateDTO,
+    UpvoteUpdateDTO,
 )
 from .lootbox import (
     LootboxKeyType,
@@ -196,6 +198,8 @@ __all__ = (
     "TierChange",
     "TimePlayedPerRankResponse",
     "TopCreatorsResponse",
+    "UpvoteCreateDTO",
+    "UpvoteUpdateDTO",
     "UserCreateDTO",
     "UserLootboxKeyAmountsResponse",
     "UserReadDTO",
