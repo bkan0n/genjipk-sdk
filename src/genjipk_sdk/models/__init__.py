@@ -84,7 +84,6 @@ from .rank_card import (
 )
 from .users import (
     NOTIFICATION_TYPES,
-    USERNAME_REGEX,
     CommunityLeaderboardReadDTO,
     Creator,
     CreatorFull,
@@ -111,7 +110,6 @@ from .xp import (
 __all__ = (
     "MAX_CREATORS",
     "NOTIFICATION_TYPES",
-    "USERNAME_REGEX",
     "XP_AMOUNTS",
     "XP_TYPES",
     "ArchivalStatusPatchDTO",

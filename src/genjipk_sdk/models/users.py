@@ -1,5 +1,4 @@
 import enum
-import re
 from typing import Literal
 
 from msgspec import UNSET, Struct, UnsetType
@@ -61,13 +60,6 @@ class CreatorFull(Creator):
     name: str
 
 
-USERNAME_REGEX = re.compile(
-    r"^(?P<name>[A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u017E\u0180-\u0188\u0190-\u0198\u01C0-\u0217]"
-    r"[A-Za-z0-9\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u017E\u0180-\u0188\u0190-\u0198\u01C0-\u0217]{2,11})"
-    r"(?:\#(?P<tag>\d+))?$"
-)
-
-
 class UserReadDTO(Struct):
     id: int
     global_name: str
@@ -91,14 +83,6 @@ class UserUpdateDTO(Struct):
 class OverwatchUsernameItem(Struct):
     username: str
     is_primary: bool = False
-
-    def __post_init__(self) -> None:
-        """Post-initialization processing to validate the username format."""
-        if not USERNAME_REGEX.match(self.username):
-            raise ValueError(
-                f"Invalid Overwatch username format: '{self.username}'. "
-                "Expected format like 'nebula#11571' or 'nebula'."
-            )
 
 
 class OverwatchUsernamesUpdate(Struct):  # TODO Rework this to use primary/secondary/tertiary
