@@ -133,6 +133,7 @@ class NewsfeedEvent(msgspec.Struct, kw_only=True):
     timestamp: dt.datetime
     payload: NewsfeedPayload
     event_type: NewsfeedEventType | None = None
+    total_results: int | None = None
 
 
 class NewsfeedQueueMessage(msgspec.Struct, kw_only=True):
