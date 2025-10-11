@@ -1,7 +1,7 @@
 import datetime
-from typing import Literal
+from typing import Annotated, Literal
 
-from msgspec import UNSET, Struct, UnsetType
+from msgspec import UNSET, Meta, Struct, UnsetType
 
 from genjipk_sdk.utilities.difficulties import DifficultyAll, DifficultyTop
 from genjipk_sdk.utilities.types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
@@ -134,3 +134,8 @@ class TimePlayedPerRankResponse(Struct):
 class UpvoteUpdateDTO(Struct):
     user_id: int
     message_id: int
+
+
+class QualityUpdateDTO(Struct):
+    user_id: int
+    quality: Annotated[int, Meta(ge=1, le=6)]
