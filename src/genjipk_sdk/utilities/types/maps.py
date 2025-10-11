@@ -30,7 +30,7 @@ GuideURL = Annotated[
 MapCategory = Literal[
     "Classic",
     "Increasing Difficulty",
-    "XP Based",
+    "Other",
 ]
 
 OverwatchMap = Literal[
