@@ -58,6 +58,7 @@ from .maps import (
     PopularMapsStatisticsResponse,
     QualityValueDTO,
     TopCreatorsResponse,
+    TrendingMapReadDTO,
 )
 from .newsfeed import (
     NewsfeedAnnouncement,
@@ -198,6 +199,7 @@ __all__ = (
     "TierChange",
     "TimePlayedPerRankResponse",
     "TopCreatorsResponse",
+    "TrendingMapReadDTO",
     "UpvoteCreateDTO",
     "UpvoteUpdateDTO",
     "UserCreateDTO",

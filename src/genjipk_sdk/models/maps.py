@@ -371,3 +371,13 @@ class QualityValueDTO(Struct):
 
 class XPMultiplierDTO(Struct):
     value: Annotated[float, Meta(ge=1, le=10)]
+
+
+class TrendingMapReadDTO(Struct):
+    code: OverwatchCode
+    map_name: OverwatchMap
+    clicks: int
+    completions: int
+    upvotes: int
+    momentum: float
+    trend_score: float
