@@ -11,6 +11,7 @@ from .completions import (
     UpvoteCreateDTO,
     UpvoteUpdateDTO,
 )
+from .jobs import JobStatus, JobUpdate
 from .logging import LogCreateDTO
 from .lootbox import (
     LootboxKeyType,
@@ -129,6 +130,8 @@ __all__ = (
     "CreatorFull",
     "Guide",
     "GuideFull",
+    "JobStatus",
+    "JobUpdate",
     "LogCreateDTO",
     "LootboxKeyType",
     "LootboxKeyTypeResponse",
