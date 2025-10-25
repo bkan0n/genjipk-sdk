@@ -32,3 +32,8 @@ class UpvoteSubmissionReturnDTO(Struct):
 class CreateMapReturnDTO(Struct):
     job_status: JobStatus | None
     data: MapReadDTO
+
+
+class CreatePublishNewsfeedReturnDTO(Struct):
+    job_status: JobStatus
+    newsfeed_id: int
