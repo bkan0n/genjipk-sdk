@@ -26,7 +26,7 @@ class SubmitCompletionReturnDTO(Struct):
 
 class UpvoteSubmissionReturnDTO(Struct):
     job_status: JobStatus | None
-    upvotes: int
+    upvotes: int | None
 
 
 class CreateMapReturnDTO(Struct):
