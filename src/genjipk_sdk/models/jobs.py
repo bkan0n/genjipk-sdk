@@ -3,6 +3,8 @@ from typing import Literal
 
 from msgspec import Struct
 
+from .maps import MapReadDTO
+
 
 class JobStatus(Struct):
     id: uuid.UUID
@@ -25,3 +27,8 @@ class SubmitCompletionReturnDTO(Struct):
 class UpvoteSubmissionReturnDTO(Struct):
     job_status: JobStatus | None
     upvotes: int
+
+
+class CreateMapReturnDTO(Struct):
+    job_status: JobStatus | None
+    data: MapReadDTO
