@@ -44,7 +44,8 @@ class NewsfeedNewMap(_TaggedPayload, tag="new_map", kw_only=True):
 
     def __post_init__(self) -> None:
         """Set the map banner dynamically."""
-        self.banner_url = get_map_banner(self.map_name)
+        if not self.banner_url:
+            self.banner_url = get_map_banner(self.map_name)
 
 
 class NewsfeedArchive(_TaggedPayload, tag="archive", kw_only=True):
