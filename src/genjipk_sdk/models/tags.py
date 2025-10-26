@@ -42,72 +42,63 @@ class TagsSearchResponse(msgspec.Struct):
     suggestions: list[str] | None = None  # for fuzzy fallbacks
 
 
-class OpBase(msgspec.Struct):
-    op: str
+class OpBase(msgspec.Struct, tag_field="op"):
+    """Discriminated union base; JSON will include an 'op' field with the tag."""
 
 
-class OpCreate(OpBase):
-    op: Literal["create"]
+class OpCreate(OpBase, tag="create"):
     guild_id: int
     name: str
     content: str
     owner_id: int
 
 
-class OpAlias(OpBase):
-    op: Literal["alias"]
+class OpAlias(OpBase, tag="alias"):
     guild_id: int
     new_name: str
     old_name: str
     owner_id: int
 
 
-class OpEdit(OpBase):
-    op: Literal["edit"]
+class OpEdit(OpBase, tag="edit"):
     guild_id: int
     name: str
     new_content: str
     owner_id: int
 
 
-class OpRemove(OpBase):
-    op: Literal["remove"]
+class OpRemove(OpBase, tag="remove"):
     guild_id: int
     name: str
     requester_id: int
 
 
-class OpRemoveById(OpBase):
-    op: Literal["remove_by_id"]
+class OpRemoveById(OpBase, tag="remove_by_id"):
     guild_id: int
     tag_id: int
     requester_id: int
 
 
-class OpClaim(OpBase):
-    op: Literal["claim"]
+class OpClaim(OpBase, tag="claim"):
     guild_id: int
     name: str
     requester_id: int
 
 
-class OpTransfer(OpBase):
-    op: Literal["transfer"]
+class OpTransfer(OpBase, tag="transfer"):
     guild_id: int
     name: str
     new_owner_id: int
     requester_id: int
 
 
-class OpPurge(OpBase):
-    op: Literal["purge"]
+class OpPurge(OpBase, tag="purge"):
     guild_id: int
     owner_id: int
     requester_id: int
 
 
-class OpIncrementUsage(OpBase):
-    op: Literal["increment_usage"]
+class OpIncrementUsage(OpBase, tag="increment_usage"):
     guild_id: int
     name: str
 
@@ -116,7 +107,7 @@ TagOp = OpCreate | OpAlias | OpEdit | OpRemove | OpRemoveById | OpClaim | OpTran
 
 
 class TagsMutateRequest(msgspec.Struct):
-    ops: list[TagOp]  # supports batching in one HTTP call
+    ops: list[TagOp]
 
 
 class TagsMutateResult(msgspec.Struct, omit_defaults=True):
