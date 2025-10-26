@@ -23,6 +23,7 @@ class XpGrantResult(Struct):
 
 class XpGrant(Struct):
     amount: int
+    type: XP_TYPES
 
 
 class TierChange(Struct):
