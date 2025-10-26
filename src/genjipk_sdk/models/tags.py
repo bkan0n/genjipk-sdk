@@ -45,6 +45,13 @@ class TagsSearchResponse(msgspec.Struct):
 class OpBase(msgspec.Struct, tag_field="op"):
     """Discriminated union base; JSON will include an 'op' field with the tag."""
 
+    @property
+    def op(self) -> str:
+        # Return the configured tag (e.g., "create", "edit", ...)
+        # This does NOT affect serialization; msgspec still emits "op": "<tag>"
+        ti = msgspec.inspect.type_info(type(self))
+        return "" if ti.tag is None else ti.tag
+
 
 class OpCreate(OpBase, tag="create"):
     guild_id: int
