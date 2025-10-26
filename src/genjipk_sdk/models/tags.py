@@ -47,10 +47,8 @@ class OpBase(msgspec.Struct, tag_field="op"):
 
     @property
     def op(self) -> str:
-        # Return the configured tag (e.g., "create", "edit", ...)
-        # This does NOT affect serialization; msgspec still emits "op": "<tag>"
         ti = msgspec.inspect.type_info(type(self))
-        return "" if ti.tag is None else ti.tag
+        return "" if ti.tag is None else ti.tag  # pyright: ignore[reportAttributeAccessIssue]
 
 
 class OpCreate(OpBase, tag="create"):
