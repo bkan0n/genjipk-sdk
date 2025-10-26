@@ -50,3 +50,11 @@ class PlayersPerXPTierResponse(Struct):
 class PlayersPerSkillTierResponse(Struct):
     tier: str
     amount: int
+
+
+class XpGrantMQ(Struct):
+    user_id: int
+    amount: int
+    type: XP_TYPES
+    previous_amount: int
+    new_amount: int
