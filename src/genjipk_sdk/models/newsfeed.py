@@ -100,7 +100,7 @@ class NewsfeedMapEdit(_TaggedPayload, tag="map_edit", kw_only=True):
 class NewsfeedRole(_TaggedPayload, tag="role", kw_only=True):
     user_id: int
     name: str
-    added: list[int]
+    added: list[str]
 
 
 class NewsfeedAnnouncement(_TaggedPayload, tag="announcement", kw_only=True):
