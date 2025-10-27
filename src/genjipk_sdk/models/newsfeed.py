@@ -25,7 +25,6 @@ class _TaggedPayload(msgspec.Struct, tag_field="type"):
 class NewsfeedRecord(_TaggedPayload, tag="record", kw_only=True):
     code: OverwatchCode
     map_name: OverwatchMap
-    creators: list[str]
     time: float
     video: GuideURL
     rank_num: int
