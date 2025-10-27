@@ -48,7 +48,7 @@ class CompletionSubmissionReadDTO(Struct):
     inserted_at: datetime.datetime
     code: OverwatchCode
     difficulty: DifficultyAll
-    map_name: str
+    map_name: OverwatchMap
     hypothetical_rank: int | None
     hypothetical_medal: MedalType | None
     name: str
