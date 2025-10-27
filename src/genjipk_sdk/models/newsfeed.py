@@ -5,10 +5,10 @@ import datetime as dt
 
 import msgspec
 
+from genjipk_sdk.utilities._types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
+from genjipk_sdk.utilities._types.newsfeed import NewsfeedEventType
 from genjipk_sdk.utilities.difficulties import DifficultyAll
 from genjipk_sdk.utilities.maps import get_map_banner
-from genjipk_sdk.utilities.types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
-from genjipk_sdk.utilities.types.newsfeed import NewsfeedEventType
 
 # Scalars for map_edit diffs, etc.
 NewsfeedScalar = str | int | float | bool | None

@@ -1,4 +1,4 @@
-from . import types
+from . import _types
 from .difficulties import (
     DIFFICULTY_COLORS,
     DIFFICULTY_MIDPOINTS,
@@ -22,9 +22,9 @@ __all__ = (
     "PLAYTEST_VOTE_THRESHOLD",
     "DifficultyAll",
     "DifficultyTop",
+    "_types",
     "convert_extended_difficulty_to_top_level",
     "convert_raw_difficulty_to_difficulty_all",
     "convert_raw_difficulty_to_difficulty_top",
     "get_map_banner",
-    "types",
 )

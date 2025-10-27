@@ -7,8 +7,7 @@ from msgspec import UNSET, Meta, Struct, UnsetType, ValidationError
 from genjipk_sdk.utilities.lootbox import sanitize_string
 
 from ..utilities import difficulties
-from ..utilities.maps import get_map_banner
-from ..utilities.types import (
+from ..utilities._types import (
     GuideURL,
     MapCategory,
     Mechanics,
@@ -17,6 +16,7 @@ from ..utilities.types import (
     PlaytestStatus,
     Restrictions,
 )
+from ..utilities.maps import get_map_banner
 from .users import Creator, CreatorFull
 
 MAX_CREATORS = 3
