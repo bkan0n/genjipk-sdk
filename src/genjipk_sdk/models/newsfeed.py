@@ -38,6 +38,7 @@ class NewsfeedNewMap(_TaggedPayload, tag="new_map", kw_only=True):
     map_name: OverwatchMap
     difficulty: DifficultyAll
     creators: list[str]
+    title: str | None = None
     banner_url: str | None = None
     official: bool = True
 
