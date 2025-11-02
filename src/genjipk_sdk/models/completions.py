@@ -31,7 +31,7 @@ class CompletionReadDTO(Struct):
     difficulty: DifficultyAll
     message_id: int
     legacy: bool
-    legacy_medal: str | None
+    legacy_medal: MedalType | None
     suspicious: bool
     total_results: int | None = None
     upvotes: int = 0
