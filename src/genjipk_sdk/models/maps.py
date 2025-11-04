@@ -216,7 +216,6 @@ class MessageQueueCreatePlaytest(msgspec.Struct):
 
 
 class PlaytestVote(msgspec.Struct):
-    code: OverwatchCode
     difficulty: float
 
 
