@@ -37,3 +37,11 @@ class CreateMapReturnDTO(Struct):
 class CreatePublishNewsfeedReturnDTO(Struct):
     job_status: JobStatus
     newsfeed_id: int
+
+
+class ClaimRequest(Struct):
+    key: str
+
+
+class ClaimResponse(Struct):
+    claimed: bool
