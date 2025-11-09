@@ -384,3 +384,8 @@ class TrendingMapReadDTO(Struct):
     upvotes: int
     momentum: float
     trend_score: float
+
+
+class LinkMapsCreateDTO(Struct):
+    official_code: OverwatchCode | None = None
+    unofficial_code: OverwatchCode | None = None
