@@ -113,7 +113,11 @@ class NewsfeedAnnouncement(_TaggedPayload, tag="announcement", kw_only=True):
     from_discord: bool
 
 
-# Union of tagged payloads (now valid)
+class NewsfeedLinkedMap(_TaggedPayload, tag="linked_map", kw_only=True):
+    official_code: OverwatchCode
+    unofficial_code: OverwatchCode
+
+
 NewsfeedPayload = (
     NewsfeedRecord
     | NewsfeedNewMap
@@ -126,6 +130,7 @@ NewsfeedPayload = (
     | NewsfeedMapEdit
     | NewsfeedRole
     | NewsfeedAnnouncement
+    | NewsfeedLinkedMap
 )
 
 

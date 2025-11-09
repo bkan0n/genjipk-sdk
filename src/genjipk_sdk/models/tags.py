@@ -47,6 +47,7 @@ class OpBase(msgspec.Struct, tag_field="op"):
 
     @property
     def op(self) -> str:
+        """Return the operation type."""
         ti = msgspec.inspect.type_info(type(self))
         return "" if ti.tag is None else ti.tag  # pyright: ignore[reportAttributeAccessIssue]
 
