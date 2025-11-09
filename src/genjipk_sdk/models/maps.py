@@ -387,5 +387,5 @@ class TrendingMapReadDTO(Struct):
 
 
 class LinkMapsCreateDTO(Struct):
-    official_code: OverwatchCode | None = None
-    unofficial_code: OverwatchCode | None = None
+    official_code: OverwatchCode
+    unofficial_code: OverwatchCode
