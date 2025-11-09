@@ -58,6 +58,7 @@ from .maps import (
     PlaytestVoteWithUser,
     PopularMapsStatisticsResponse,
     QualityValueDTO,
+    SendToPlaytestDTO,
     TopCreatorsResponse,
     TrendingMapReadDTO,
 )
@@ -197,6 +198,7 @@ __all__ = (
     "RankCardDifficultiesData",
     "RankDetailReadDTO",
     "RewardTypeResponse",
+    "SendToPlaytestDTO",
     "SettingsUpdate",
     "StaleChangeRequestReadDTO",
     "TierChange",

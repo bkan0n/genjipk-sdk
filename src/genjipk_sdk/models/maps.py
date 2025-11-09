@@ -157,6 +157,10 @@ class MapReadDTO(msgspec.Struct):
         return res.name
 
 
+class SendToPlaytestDTO(msgspec.Struct):
+    initial_difficulty: difficulties.DifficultyAll
+
+
 class PlaytestCreatePartialDTO(msgspec.Struct):
     code: OverwatchCode
     initial_difficulty: difficulties.DifficultyAll
