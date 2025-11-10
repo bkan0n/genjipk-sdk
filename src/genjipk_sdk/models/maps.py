@@ -389,3 +389,4 @@ class TrendingMapReadDTO(Struct):
 class LinkMapsCreateDTO(Struct):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
+    in_playtest: bool
