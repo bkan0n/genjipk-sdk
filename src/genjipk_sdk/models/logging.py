@@ -1,7 +1,7 @@
 import datetime as dt
+from typing import Literal
 
 from msgspec import Struct
-from typing_extensions import Literal
 
 from genjipk_sdk.utilities._types.maps import OverwatchCode
 
