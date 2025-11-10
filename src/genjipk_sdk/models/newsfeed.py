@@ -116,7 +116,7 @@ class NewsfeedAnnouncement(_TaggedPayload, tag="announcement", kw_only=True):
 class NewsfeedLinkedMap(_TaggedPayload, tag="linked_maps", kw_only=True):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
-    in_playtest: bool
+    playtest_id: int | None = None
 
 
 NewsfeedPayload = (
