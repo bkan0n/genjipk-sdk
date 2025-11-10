@@ -113,7 +113,7 @@ class NewsfeedAnnouncement(_TaggedPayload, tag="announcement", kw_only=True):
     from_discord: bool
 
 
-class NewsfeedLinkedMap(_TaggedPayload, tag="linked_maps", kw_only=True):
+class NewsfeedLinkedMap(_TaggedPayload, tag="linked_map", kw_only=True):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
     playtest_id: int | None = None
