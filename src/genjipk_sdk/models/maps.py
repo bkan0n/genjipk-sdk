@@ -133,6 +133,7 @@ class MapReadDTO(msgspec.Struct):
     map_banner: str | None = ""
     time: float | None = None
     total_results: int | None = None
+    linked_code: OverwatchCode | None = None
 
     def __post_init__(self) -> None:
         """Post init."""
