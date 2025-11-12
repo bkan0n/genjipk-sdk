@@ -390,3 +390,9 @@ class TrendingMapReadDTO(Struct):
 class LinkMapsCreateDTO(Struct):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
+
+
+class UnlinkMapsCreateDTO(Struct):
+    official_code: OverwatchCode
+    unofficial_code: OverwatchCode
+    reason: str

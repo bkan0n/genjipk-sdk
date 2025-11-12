@@ -13,4 +13,5 @@ NewsfeedEventType = Literal[
     "role",
     "announcement",
     "linked_map",
+    "unlinked_map",
 ]

@@ -119,6 +119,12 @@ class NewsfeedLinkedMap(_TaggedPayload, tag="linked_map", kw_only=True):
     playtest_id: int | None = None
 
 
+class NewsfeedUnlinkedMap(_TaggedPayload, tag="unlinked_map", kw_only=True):
+    official_code: OverwatchCode
+    unofficial_code: OverwatchCode
+    reason: str
+
+
 NewsfeedPayload = (
     NewsfeedRecord
     | NewsfeedNewMap
@@ -132,6 +138,7 @@ NewsfeedPayload = (
     | NewsfeedRole
     | NewsfeedAnnouncement
     | NewsfeedLinkedMap
+    | NewsfeedUnlinkedMap
 )
 
 
