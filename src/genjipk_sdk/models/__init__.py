@@ -79,6 +79,7 @@ from .newsfeed import (
     NewsfeedRecord,
     NewsfeedRole,
     NewsfeedUnarchive,
+    NewsfeedUnlinkedMap,
 )
 from .rank_card import (
     AvatarResponse,
@@ -168,6 +169,7 @@ __all__ = (
     "NewsfeedRecord",
     "NewsfeedRole",
     "NewsfeedUnarchive",
+    "NewsfeedUnlinkedMap",
     "Notification",
     "OverwatchUsernameItem",
     "OverwatchUsernamesReadDTO",
