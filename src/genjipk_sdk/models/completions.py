@@ -139,3 +139,39 @@ class UpvoteUpdateDTO(Struct):
 class QualityUpdateDTO(Struct):
     user_id: int
     quality: Annotated[int, Meta(ge=1, le=6)]
+
+
+def to_camel(name: str) -> str:
+    parts = name.split("_")
+    return parts[0] + "".join(p.title() for p in parts[1:])
+
+
+class CamelConfig(Struct, rename=to_camel):
+    """Base struct that renames fields to camelCase during encoding/decoding."""
+
+
+class ExtractedTexts(CamelConfig):
+    top_left: str | None
+    top_left_white: str | None
+    top_left_cyan: str | None
+    banner: str | None
+    top_right: str | None
+    bottom_left: str | None
+
+
+class ExtractedResult(CamelConfig):
+    name: str | None
+    time: float | None
+    code: str | None
+    texts: ExtractedTexts
+
+
+class OcrApiResponse(CamelConfig):
+    extracted: ExtractedResult
+
+
+class FailedAutoverifyMessage(Struct):
+    submitted_code: OverwatchCode
+    submitted_time: float
+    user_id: int
+    extracted: ExtractedResult
