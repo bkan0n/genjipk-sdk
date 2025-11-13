@@ -20,7 +20,7 @@ class JobUpdate(Struct):
 
 
 class SubmitCompletionReturnDTO(Struct):
-    job_status: JobStatus
+    job_status: JobStatus | None
     completion_id: int
 
 
