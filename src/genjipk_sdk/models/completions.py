@@ -175,3 +175,9 @@ class FailedAutoverifyMessage(Struct):
     submitted_time: float
     user_id: int
     extracted: ExtractedResult
+    code_match: bool
+    time_match: bool
+    user_match: bool
+    extracted_code_cleaned: str | None
+    extracted_time: float | None
+    extracted_user_id: int | None
