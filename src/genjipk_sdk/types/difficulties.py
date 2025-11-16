@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Literal, TypeVar
 
-from genjipk_sdk.utilities._types.ranks import Rank
+from .ranks import Rank
 
 DifficultyTop = Literal[
     "Easy",
