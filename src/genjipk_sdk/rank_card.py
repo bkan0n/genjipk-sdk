@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from msgspec import Struct
 
-from genjipk_sdk.utilities.difficulties import DifficultyTop
-from genjipk_sdk.utilities.lootbox import sanitize_string
+from genjipk_sdk.helpers import sanitize_string
+from genjipk_sdk.types import DifficultyTop
 
 
 class BackgroundResponse(Struct):

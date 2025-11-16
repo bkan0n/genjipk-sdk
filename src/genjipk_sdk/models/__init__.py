@@ -1,5 +1,5 @@
-from .change_requests import ChangeRequestCreateDTO, ChangeRequestReadDTO, ChangeRequestType, StaleChangeRequestReadDTO
-from .completions import (
+from genjipk_sdk.change_requests import ChangeRequestCreateDTO, ChangeRequestReadDTO, ChangeRequestType, StaleChangeRequestReadDTO
+from genjipk_sdk.completions import (
     CompletionCreateDTO,
     CompletionPatchDTO,
     CompletionReadDTO,
@@ -11,16 +11,16 @@ from .completions import (
     UpvoteCreateDTO,
     UpvoteUpdateDTO,
 )
-from .jobs import JobStatus, JobUpdate
-from .logging import LogCreateDTO
-from .lootbox import (
+from genjipk_sdk.jobs import JobStatus, JobUpdate
+from genjipk_sdk.logs import LogCreateDTO
+from genjipk_sdk.lootbox import (
     LootboxKeyType,
     LootboxKeyTypeResponse,
     RewardTypeResponse,
     UserLootboxKeyAmountsResponse,
     UserRewardsResponse,
 )
-from .maps import (
+from genjipk_sdk.maps import (
     MAX_CREATORS,
     ArchivalStatusPatchDTO,
     Guide,
@@ -62,7 +62,7 @@ from .maps import (
     TopCreatorsResponse,
     TrendingMapReadDTO,
 )
-from .newsfeed import (
+from genjipk_sdk.newsfeed import (
     NewsfeedAnnouncement,
     NewsfeedArchive,
     NewsfeedBulkArchive,
@@ -81,14 +81,14 @@ from .newsfeed import (
     NewsfeedUnarchive,
     NewsfeedUnlinkedMap,
 )
-from .rank_card import (
+from genjipk_sdk.rank_card import (
     AvatarResponse,
     BackgroundResponse,
     RankCardBadgeSettings,
     RankCardData,
     RankCardDifficultiesData,
 )
-from .users import (
+from genjipk_sdk.users import (
     NOTIFICATION_TYPES,
     CommunityLeaderboardReadDTO,
     Creator,
@@ -103,7 +103,7 @@ from .users import (
     UserReadDTO,
     UserUpdateDTO,
 )
-from .xp import (
+from genjipk_sdk.xp import (
     XP_AMOUNTS,
     XP_TYPES,
     PlayersPerSkillTierResponse,

@@ -1,30 +1,18 @@
-from . import _types
-from .difficulties import (
-    DIFFICULTY_COLORS,
-    DIFFICULTY_MIDPOINTS,
-    DIFFICULTY_RANGES_ALL,
-    DIFFICULTY_RANGES_TOP,
-    DIFFICULTY_TO_RANK_MAP,
-    DifficultyAll,
-    DifficultyTop,
-    convert_extended_difficulty_to_top_level,
-    convert_raw_difficulty_to_difficulty_all,
-    convert_raw_difficulty_to_difficulty_top,
-)
-from .maps import PLAYTEST_VOTE_THRESHOLD, get_map_banner
+"""Compatibility layer for legacy utilities imports.
 
-__all__ = (
-    "DIFFICULTY_COLORS",
-    "DIFFICULTY_MIDPOINTS",
-    "DIFFICULTY_RANGES_ALL",
-    "DIFFICULTY_RANGES_TOP",
-    "DIFFICULTY_TO_RANK_MAP",
+This package re-exports objects from the new module layout to maintain
+backwards compatibility with callers that still import from
+``genjipk_sdk.utilities``. Prefer importing from ``genjipk_sdk.types``,
+``genjipk_sdk.maps``, or ``genjipk_sdk.helpers`` going forward.
+"""
+from genjipk_sdk import helpers, maps, types
+from genjipk_sdk.helpers import sanitize_string
+from genjipk_sdk.maps import PLAYTEST_VOTE_THRESHOLD, get_map_banner
+from genjipk_sdk.types import *  # noqa: F401,F403
+
+__all__ = [
+    *types.__all__,
+    "sanitize_string",
     "PLAYTEST_VOTE_THRESHOLD",
-    "DifficultyAll",
-    "DifficultyTop",
-    "_types",
-    "convert_extended_difficulty_to_top_level",
-    "convert_raw_difficulty_to_difficulty_all",
-    "convert_raw_difficulty_to_difficulty_top",
     "get_map_banner",
-)
+]

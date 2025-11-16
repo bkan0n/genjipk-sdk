@@ -1,17 +1,7 @@
-from typing import Literal
+"""Deprecated compatibility module for newsfeed types.
 
-NewsfeedEventType = Literal[
-    "new_map",
-    "record",
-    "archive",
-    "unarchive",
-    "bulk_archive",
-    "bulk_unarchive",
-    "guide",
-    "legacy_record",
-    "map_edit",
-    "role",
-    "announcement",
-    "linked_map",
-    "unlinked_map",
-]
+Import from :mod:`genjipk_sdk.types` instead.
+"""
+from genjipk_sdk.types import NewsfeedEventType
+
+__all__ = ["NewsfeedEventType"]

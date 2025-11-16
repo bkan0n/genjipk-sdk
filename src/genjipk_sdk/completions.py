@@ -3,8 +3,7 @@ from typing import Annotated, Literal
 
 from msgspec import UNSET, Meta, Struct, UnsetType
 
-from genjipk_sdk.utilities._types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
-from genjipk_sdk.utilities.difficulties import DifficultyAll, DifficultyTop
+from genjipk_sdk.types import DifficultyAll, DifficultyTop, GuideURL, MedalType, OverwatchCode, OverwatchMap
 
 
 class CompletionCreateDTO(Struct):

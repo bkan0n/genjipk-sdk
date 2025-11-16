@@ -1,10 +1,7 @@
-import re
+"""Deprecated compatibility module for lootbox helpers.
 
+Import :func:`sanitize_string` from :mod:`genjipk_sdk.helpers` instead.
+"""
+from genjipk_sdk.helpers import sanitize_string
 
-def sanitize_string(string: str | None) -> str:
-    """Sanitize string."""
-    if not string:
-        return ""
-    string = re.sub(r"[^a-zA-Z\s0-9]", "", string)
-    string = string.strip().replace(" ", "_")
-    return string.lower()
+__all__ = ["sanitize_string"]

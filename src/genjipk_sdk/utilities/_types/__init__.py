@@ -1,29 +1,8 @@
-from .maps import (
-    URL_PATTERN,
-    URL_REGEX,
-    GuideURL,
-    MapCategory,
-    Mechanics,
-    MedalType,
-    OverwatchCode,
-    OverwatchMap,
-    PlaytestStatus,
-    Restrictions,
-)
-from .newsfeed import NewsfeedEventType
-from .ranks import Rank
+"""Deprecated compatibility layer for shared types.
 
-__all__ = (
-    "URL_PATTERN",
-    "URL_REGEX",
-    "GuideURL",
-    "MapCategory",
-    "Mechanics",
-    "MedalType",
-    "NewsfeedEventType",
-    "OverwatchCode",
-    "OverwatchMap",
-    "PlaytestStatus",
-    "Rank",
-    "Restrictions",
-)
+Import from :mod:`genjipk_sdk.types` instead.
+"""
+from genjipk_sdk import types
+from genjipk_sdk.types import *  # noqa: F401,F403
+
+__all__ = [*types.__all__]

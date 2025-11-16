@@ -1,3 +1,7 @@
-from typing import Literal
+"""Deprecated compatibility module for rank types.
 
-Rank = Literal["Ninja", "Jumper", "Skilled", "Pro", "Master", "Grandmaster", "God"]
+Import from :mod:`genjipk_sdk.types` instead.
+"""
+from genjipk_sdk.types import Rank
+
+__all__ = ["Rank"]
