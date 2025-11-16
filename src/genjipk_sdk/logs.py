@@ -3,7 +3,7 @@ from typing import Literal
 
 from msgspec import Struct
 
-from genjipk_sdk.types import OverwatchCode
+from .maps import OverwatchCode
 
 
 class LogCreateDTO(Struct):

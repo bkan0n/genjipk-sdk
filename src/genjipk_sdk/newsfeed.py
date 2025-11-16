@@ -1,12 +1,28 @@
-# genjipk_sdk/models/newsfeed.py
 from __future__ import annotations
 
 import datetime as dt
+from typing import Literal
 
 import msgspec
 
-from genjipk_sdk.maps import get_map_banner
-from genjipk_sdk.types import DifficultyAll, GuideURL, MedalType, NewsfeedEventType, OverwatchCode, OverwatchMap
+from .maps import get_map_banner
+
+NewsfeedEventType = Literal[
+    "new_map",
+    "record",
+    "archive",
+    "unarchive",
+    "bulk_archive",
+    "bulk_unarchive",
+    "guide",
+    "legacy_record",
+    "map_edit",
+    "role",
+    "announcement",
+    "linked_map",
+    "unlinked_map",
+]
+
 
 # Scalars for map_edit diffs, etc.
 NewsfeedScalar = str | int | float | bool | None
