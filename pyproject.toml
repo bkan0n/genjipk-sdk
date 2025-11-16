@@ -28,7 +28,7 @@ branch = "main"
 changelog_file = "CHANGELOG.md"
 upload_to_pypi = false
 upload_to_release = true
-build_command = "python -m build"
+build_command = "python -m pip install --upgrade build && python -m build"
 
 [tool.ruff]
 exclude = ["tests"]
