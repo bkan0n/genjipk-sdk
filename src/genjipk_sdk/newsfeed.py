@@ -1,14 +1,12 @@
-# genjipk_sdk/models/newsfeed.py
+# genjipk_sdk/newsfeed.py
 from __future__ import annotations
 
 import datetime as dt
 
 import msgspec
 
-from genjipk_sdk.utilities._types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
-from genjipk_sdk.utilities._types.newsfeed import NewsfeedEventType
-from genjipk_sdk.utilities.difficulties import DifficultyAll
-from genjipk_sdk.utilities.maps import get_map_banner
+from genjipk_sdk.maps import get_map_banner
+from genjipk_sdk.types import DifficultyAll, GuideURL, MedalType, NewsfeedEventType, OverwatchCode, OverwatchMap
 
 # Scalars for map_edit diffs, etc.
 NewsfeedScalar = str | int | float | bool | None

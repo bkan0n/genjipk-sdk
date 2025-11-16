@@ -5,7 +5,7 @@ from typing import Literal
 
 from msgspec import Struct
 
-from genjipk_sdk.utilities.lootbox import sanitize_string
+from genjipk_sdk.helpers import sanitize_string
 
 LootboxKeyType = Literal["Classic", "Winter"]
 

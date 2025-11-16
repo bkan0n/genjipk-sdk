@@ -1,13 +1,14 @@
 import datetime
+import re
 from typing import Annotated, Literal
 
 import msgspec
 from msgspec import UNSET, Meta, Struct, UnsetType, ValidationError
 
-from genjipk_sdk.utilities.lootbox import sanitize_string
-
-from ..utilities import difficulties
-from ..utilities._types import (
+from genjipk_sdk.helpers import sanitize_string
+from genjipk_sdk.types import (
+    DifficultyAll,
+    DifficultyTop,
     GuideURL,
     MapCategory,
     Mechanics,
@@ -16,7 +17,6 @@ from ..utilities._types import (
     PlaytestStatus,
     Restrictions,
 )
-from ..utilities.maps import get_map_banner
 from .users import Creator, CreatorFull
 
 MAX_CREATORS = 3
@@ -51,7 +51,7 @@ class MapCreateDTO(msgspec.Struct):
     category: MapCategory
     creators: Annotated[list[Creator], msgspec.Meta(max_length=3)]
     checkpoints: Annotated[int, msgspec.Meta(gt=0)]
-    difficulty: difficulties.DifficultyAll
+    difficulty: DifficultyAll
     official: bool = True
     hidden: bool = True
     playtesting: PlaytestStatus = "In Progress"
@@ -79,7 +79,7 @@ class MapPatchDTO(msgspec.Struct, kw_only=True):
     category: MapCategory | UnsetType = UNSET
     creators: list[Creator] | UnsetType = UNSET
     checkpoints: Annotated[int, msgspec.Meta(gt=0)] | UnsetType = UNSET
-    difficulty: difficulties.DifficultyAll | UnsetType = UNSET
+    difficulty: DifficultyAll | UnsetType = UNSET
     hidden: bool | UnsetType = UNSET
     official: bool | UnsetType = UNSET
     playtesting: PlaytestStatus | UnsetType = UNSET
@@ -114,7 +114,7 @@ class MapReadDTO(msgspec.Struct):
     category: MapCategory
     creators: list[CreatorFull]
     checkpoints: Annotated[int, msgspec.Meta(gt=0)]
-    difficulty: difficulties.DifficultyAll
+    difficulty: DifficultyAll
     official: bool
     playtesting: PlaytestStatus
     archived: bool
@@ -159,12 +159,12 @@ class MapReadDTO(msgspec.Struct):
 
 
 class SendToPlaytestDTO(msgspec.Struct):
-    initial_difficulty: difficulties.DifficultyAll
+    initial_difficulty: DifficultyAll
 
 
 class PlaytestCreatePartialDTO(msgspec.Struct):
     code: OverwatchCode
-    initial_difficulty: difficulties.DifficultyAll
+    initial_difficulty: DifficultyAll
 
 
 class PlaytestAssociateIDThread(msgspec.Struct):
@@ -175,7 +175,7 @@ class PlaytestAssociateIDThread(msgspec.Struct):
 class PlaytestCreateDTO(msgspec.Struct):
     code: OverwatchCode
     thread_id: int
-    initial_difficulty: difficulties.DifficultyAll
+    initial_difficulty: DifficultyAll
 
 
 class PlaytestReadDTO(msgspec.Struct):
@@ -204,7 +204,7 @@ class PlaytestPatchDTO(msgspec.Struct):
 class MapReadPartialDTO(msgspec.Struct):
     map_id: int
     code: OverwatchCode
-    difficulty: difficulties.DifficultyAll
+    difficulty: DifficultyAll
     creator_name: str
     map_name: OverwatchMap
     checkpoints: int
@@ -287,14 +287,14 @@ class PlaytestApproveCreate(msgspec.Struct):
 
 
 class PlaytestApproveMQ(PlaytestApproveCreate):
-    difficulty: difficulties.DifficultyAll
+    difficulty: DifficultyAll
     thread_id: int
     primary_creator_id: int
     code: OverwatchCode
 
 
 class PlaytestForceAcceptCreate(msgspec.Struct):
-    difficulty: difficulties.DifficultyAll
+    difficulty: DifficultyAll
     verifier_id: int
 
 
@@ -346,7 +346,7 @@ class MapCompletionStatisticsResponse(Struct):
 
 
 class MapPerDifficultyStatisticsResponse(Struct):
-    difficulty: difficulties.DifficultyTop
+    difficulty: DifficultyTop
     amount: int
 
 
@@ -354,7 +354,7 @@ class PopularMapsStatisticsResponse(Struct):
     code: OverwatchCode
     completions: int
     quality: float
-    difficulty: difficulties.DifficultyTop
+    difficulty: DifficultyTop
     ranking: int
 
 
@@ -396,3 +396,20 @@ class UnlinkMapsCreateDTO(Struct):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
     reason: str
+
+
+PLAYTEST_VOTE_THRESHOLD: dict[DifficultyTop, int] = {
+    "Easy": 5,
+    "Medium": 5,
+    "Hard": 5,
+    "Very Hard": 3,
+    "Extreme": 2,
+    "Hell": 1,
+}
+
+
+def get_map_banner(map_name: str) -> str:
+    """Get the applicable map banner."""
+    _map = re.sub(r"[^a-zA-Z0-9]", "", map_name)
+    sanitized_name = _map.lower().strip().replace(" ", "")
+    return f"https://bkan0n.com/assets/images/map_banners/{sanitized_name}.png"

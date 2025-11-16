@@ -3,7 +3,7 @@ from typing import Literal
 
 from msgspec import UNSET, Struct, UnsetType
 
-from genjipk_sdk.utilities.difficulties import DifficultyTop
+from genjipk_sdk.types import DifficultyTop
 
 
 class Notification(enum.IntFlag):
