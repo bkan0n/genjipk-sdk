@@ -1,20 +1,35 @@
 [project]
 name = "genjipk-sdk"
 version = "0.1.0"
-description = "Add your description here"
+description = "A command library for Genji Parkour services."
 readme = "README.md"
 authors = [
     { name = "tylovejoy", email = "48333668+tylovejoy@users.noreply.github.com" },
 ]
 requires-python = ">=3.13"
-dependencies = ["hatchling>=1.27.0", "msgspec>=0.19.0"]
+dependencies = [
+ "msgspec>=0.19.0",
+]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = ["basedpyright>=1.29.4", "ruff>=0.12.0"]
+dev = [
+ "basedpyright>=1.29.4",
+ "python-semantic-release>=10.5.2",
+ "ruff>=0.12.0",
+]
+
+[tool.semantic_release]
+version_source = "tag"
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+changelog_file = "CHANGELOG.md"
+upload_to_pypi = true
+upload_to_release = true
+build_command = "python -m build"
 
 [tool.ruff]
 exclude = ["tests"]

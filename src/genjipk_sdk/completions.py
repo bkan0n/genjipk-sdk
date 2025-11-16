@@ -3,8 +3,8 @@ from typing import Annotated, Literal
 
 from msgspec import UNSET, Meta, Struct, UnsetType
 
-from genjipk_sdk.utilities._types.maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
-from genjipk_sdk.utilities.difficulties import DifficultyAll, DifficultyTop
+from .difficulties import DifficultyAll, DifficultyTop
+from .maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
 
 
 class CompletionCreateDTO(Struct):
@@ -142,6 +142,7 @@ class QualityUpdateDTO(Struct):
 
 
 def to_camel(name: str) -> str:
+    """Convert a snake_case field name to camelCase."""
     parts = name.split("_")
     return parts[0] + "".join(p.title() for p in parts[1:])
 
