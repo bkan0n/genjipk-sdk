@@ -5,6 +5,11 @@ from msgspec import Struct
 
 from .maps import OverwatchCode
 
+__all__ = (
+    "LogCreateRequest",
+    "MapClickCreateRequest",
+)
+
 
 class LogCreateRequest(Struct):
     command_name: str

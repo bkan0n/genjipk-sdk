@@ -2,6 +2,13 @@ from typing import Literal
 
 from msgspec import Struct
 
+__all__ = (
+    "ChangeRequestCreateRequest",
+    "ChangeRequestResponse",
+    "ChangeRequestType",
+    "StaleChangeRequestResponse",
+)
+
 ChangeRequestType = Literal[
     "Difficulty Change",
     "Map Geometry",

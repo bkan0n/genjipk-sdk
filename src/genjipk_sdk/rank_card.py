@@ -5,6 +5,14 @@ from msgspec import Struct
 from .difficulties import DifficultyTop
 from .helpers import sanitize_string
 
+__all__ = (
+    "AvatarResponse",
+    "BackgroundResponse",
+    "RankCardBadgeSettings",
+    "RankCardDifficultiesData",
+    "RankCardResponse",
+)
+
 
 class BackgroundResponse(Struct):
     name: str | None

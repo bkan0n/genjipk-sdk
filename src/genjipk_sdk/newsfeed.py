@@ -3,11 +3,35 @@ from __future__ import annotations
 import datetime as dt
 from typing import Literal
 
-import msgspec
+from msgspec import Struct
 
 from .difficulties import DifficultyAll
 from .internal import JobStatusResponse
 from .maps import GuideURL, MedalType, OverwatchCode, OverwatchMap, get_map_banner
+
+__all__ = (
+    "NewsfeedAnnouncement",
+    "NewsfeedArchive",
+    "NewsfeedBulkArchive",
+    "NewsfeedBulkUnarchive",
+    "NewsfeedDispatchEvent",
+    "NewsfeedEvent",
+    "NewsfeedEventType",
+    "NewsfeedFieldChange",
+    "NewsfeedGuide",
+    "NewsfeedLegacyRecord",
+    "NewsfeedLinkedMap",
+    "NewsfeedMapEdit",
+    "NewsfeedNewMap",
+    "NewsfeedPayload",
+    "NewsfeedRecord",
+    "NewsfeedRole",
+    "NewsfeedScalar",
+    "NewsfeedUnarchive",
+    "NewsfeedUnlinkedMap",
+    "PublishNewsfeedJobResponse",
+)
+
 
 NewsfeedEventType = Literal[
     "new_map",
@@ -31,7 +55,7 @@ NewsfeedScalar = str | int | float | bool | None
 
 
 # ---- Tagged base for all payload variants ----
-class _TaggedPayload(msgspec.Struct, tag_field="type"):
+class _TaggedPayload(Struct, tag_field="type"):
     """All payloads inherit this so they're tagged with field 'type'."""
 
 
@@ -102,7 +126,7 @@ class NewsfeedLegacyRecord(_TaggedPayload, tag="legacy_record", kw_only=True):
     reason: str
 
 
-class NewsfeedFieldChange(msgspec.Struct, kw_only=True):
+class NewsfeedFieldChange(Struct, kw_only=True):
     field: str
     old: NewsfeedScalar
     new: NewsfeedScalar
@@ -158,7 +182,7 @@ NewsfeedPayload = (
 )
 
 
-class NewsfeedEvent(msgspec.Struct, kw_only=True):
+class NewsfeedEvent(Struct, kw_only=True):
     id: int | None
     timestamp: dt.datetime
     payload: NewsfeedPayload
@@ -166,10 +190,10 @@ class NewsfeedEvent(msgspec.Struct, kw_only=True):
     total_results: int | None = None
 
 
-class NewsfeedDispatchEvent(msgspec.Struct, kw_only=True):
+class NewsfeedDispatchEvent(Struct, kw_only=True):
     newsfeed_id: int
 
 
-class PublishNewsfeedJobResponse(msgspec.Struct):
+class PublishNewsfeedJobResponse(Struct):
     job_status: JobStatusResponse
     newsfeed_id: int

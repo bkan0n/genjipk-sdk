@@ -3,6 +3,13 @@ from uuid import UUID
 
 from msgspec import Struct
 
+__all__ = (
+    "ClaimCreateRequest",
+    "ClaimResponse",
+    "JobStatusResponse",
+    "JobStatusUpdateRequest",
+)
+
 
 class JobStatusResponse(Struct):
     id: UUID

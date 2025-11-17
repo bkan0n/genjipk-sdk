@@ -7,6 +7,32 @@ from .difficulties import DifficultyAll, DifficultyTop
 from .internal import JobStatusResponse
 from .maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
 
+__all__ = (
+    "CompletionCreateRequest",
+    "CompletionCreatedEvent",
+    "CompletionPatchRequest",
+    "CompletionResponse",
+    "CompletionSubmissionJobResponse",
+    "CompletionSubmissionResponse",
+    "CompletionVerificationUpdateRequest",
+    "ExtractedResultResponse",
+    "ExtractedTextsResponse",
+    "FailedAutoverifyEvent",
+    "MapRecordProgressionResponse",
+    "OcrResponse",
+    "PendingVerificationResponse",
+    "QualityUpdateRequest",
+    "SuspiciousCompletionCreateRequest",
+    "SuspiciousCompletionResponse",
+    "SuspiciousFlag",
+    "TimePlayedPerRankResponse",
+    "UpvoteCreateRequest",
+    "UpvoteSubmissionJobResponse",
+    "UpvoteUpdateRequest",
+    "VerificationChangedEvent",
+    "WorldRecordXPCheckResponse",
+)
+
 
 class CompletionSubmissionJobResponse(Struct):
     job_status: JobStatusResponse | None
