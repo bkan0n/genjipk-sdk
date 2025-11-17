@@ -31,7 +31,7 @@ NOTIFICATION_TYPES = Literal[
 ]
 
 
-class SettingsUpdate(Struct):
+class SettingsUpdateRequest(Struct):
     notifications: list[NOTIFICATION_TYPES]
 
     def __post_init__(self) -> None:
@@ -60,7 +60,7 @@ class CreatorFull(Creator):
     name: str
 
 
-class UserReadDTO(Struct):
+class UserResponse(Struct):
     id: int
     global_name: str
     nickname: str
@@ -69,13 +69,13 @@ class UserReadDTO(Struct):
     coins: int = 0
 
 
-class UserCreateDTO(Struct):
+class UserCreateRequest(Struct):
     id: int
     global_name: str
     nickname: str
 
 
-class UserUpdateDTO(Struct):
+class UserUpdateRequest(Struct):
     global_name: str | UnsetType = UNSET
     nickname: str | UnsetType = UNSET
 
@@ -85,7 +85,7 @@ class OverwatchUsernameItem(Struct):
     is_primary: bool = False
 
 
-class OverwatchUsernamesUpdate(Struct):  # TODO Rework this to use primary/secondary/tertiary
+class OverwatchUsernamesUpdateRequest(Struct):  # TODO Rework this to use primary/secondary/tertiary
     usernames: list[OverwatchUsernameItem]
 
     def __post_init__(self) -> None:
@@ -97,14 +97,14 @@ class OverwatchUsernamesUpdate(Struct):  # TODO Rework this to use primary/secon
             raise ValueError("One Overwatch username must be designated as primary.")
 
 
-class OverwatchUsernamesReadDTO(Struct):
+class OverwatchUsernamesResponse(Struct):
     user_id: int
     primary: str | None
     secondary: str | None
     tertiary: str | None
 
 
-class RankDetailReadDTO(Struct):
+class RankDetailResponse(Struct):
     difficulty: DifficultyTop
     completions: int
     gold: int
@@ -116,7 +116,7 @@ class RankDetailReadDTO(Struct):
     bronze_rank_met: bool
 
 
-class CommunityLeaderboardReadDTO(Struct):
+class CommunityLeaderboardResponse(Struct):
     user_id: int
     nickname: str
     xp_amount: int

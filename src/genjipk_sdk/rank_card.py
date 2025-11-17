@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from msgspec import Struct
 
-from genjipk_sdk.helpers import sanitize_string
-
 from .difficulties import DifficultyTop
+from .helpers import sanitize_string
 
 
 class BackgroundResponse(Struct):
@@ -75,7 +74,7 @@ class RankCardDifficultiesData(Struct):
     total: int
 
 
-class RankCardData(Struct):
+class RankCardResponse(Struct):
     rank_name: str
     nickname: str
     background: str

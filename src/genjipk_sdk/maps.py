@@ -1,12 +1,14 @@
-import datetime
+from __future__ import annotations
+
+import datetime as dt
 import re
 from typing import Annotated, Literal
 
-import msgspec
 from msgspec import UNSET, Meta, Struct, UnsetType, ValidationError
 
 from .difficulties import DifficultyAll, DifficultyTop
 from .helpers import sanitize_string
+from .internal import JobStatusResponse
 from .users import Creator, CreatorFull
 
 MAX_CREATORS = 3
@@ -14,10 +16,10 @@ MAX_CREATORS = 3
 URL_PATTERN = r"(https?:\/\/)([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w-]*)*\/?\??([^#\n\r]*)?#?([^\n\r]*)"
 URL_REGEX = re.compile(URL_PATTERN)
 
-OverwatchCode = Annotated[str, msgspec.Meta(min_length=4, max_length=6, pattern="^[A-Z0-9]*$")]
+OverwatchCode = Annotated[str, Meta(min_length=4, max_length=6, pattern="^[A-Z0-9]*$")]
 GuideURL = Annotated[
     str,
-    msgspec.Meta(
+    Meta(
         pattern=URL_PATTERN,
         description="Must be a valid URL starting with http:// or https://.",
     ),
@@ -136,7 +138,12 @@ PlaytestStatus = Literal["Approved", "In Progress", "Rejected"]
 MedalType = Literal["Gold", "Silver", "Bronze"]
 
 
-class Medals(msgspec.Struct):
+class MapCreationJobResponse(Struct):
+    job_status: JobStatusResponse | None
+    data: MapResponse
+
+
+class MedalsResponse(Struct):
     gold: float
     silver: float
     bronze: float
@@ -150,21 +157,21 @@ class Medals(msgspec.Struct):
             raise ValidationError("Bronze medal must be larger than silver, and silver larger than gold.")
 
 
-class Guide(msgspec.Struct):
+class GuideResponse(Struct):
     url: GuideURL
     user_id: int
 
 
-class GuideFull(Guide):
+class GuideFullResponse(GuideResponse):
     usernames: list[str] = []
 
 
-class MapCreateDTO(msgspec.Struct):
+class MapCreateRequest(Struct):
     code: OverwatchCode
     map_name: OverwatchMap
     category: MapCategory
-    creators: Annotated[list[Creator], msgspec.Meta(max_length=3)]
-    checkpoints: Annotated[int, msgspec.Meta(gt=0)]
+    creators: Annotated[list[Creator], Meta(max_length=3)]
+    checkpoints: Annotated[int, Meta(gt=0)]
     difficulty: DifficultyAll
     official: bool = True
     hidden: bool = True
@@ -173,7 +180,7 @@ class MapCreateDTO(msgspec.Struct):
     mechanics: list[Mechanics] = []
     restrictions: list[Restrictions] = []
     description: str | None = None
-    medals: Medals | None = None
+    medals: MedalsResponse | None = None
     guide_url: GuideURL | None = None
     title: str | None = None
     custom_banner: str | None = None
@@ -187,12 +194,12 @@ class MapCreateDTO(msgspec.Struct):
         return res.id
 
 
-class MapPatchDTO(msgspec.Struct, kw_only=True):
+class MapPatchRequest(Struct, kw_only=True):
     code: OverwatchCode | UnsetType = UNSET
     map_name: OverwatchMap | UnsetType = UNSET
     category: MapCategory | UnsetType = UNSET
     creators: list[Creator] | UnsetType = UNSET
-    checkpoints: Annotated[int, msgspec.Meta(gt=0)] | UnsetType = UNSET
+    checkpoints: Annotated[int, Meta(gt=0)] | UnsetType = UNSET
     difficulty: DifficultyAll | UnsetType = UNSET
     hidden: bool | UnsetType = UNSET
     official: bool | UnsetType = UNSET
@@ -201,17 +208,17 @@ class MapPatchDTO(msgspec.Struct, kw_only=True):
     mechanics: list[Mechanics] | UnsetType | None = UNSET
     restrictions: list[Restrictions] | UnsetType | None = UNSET
     description: str | UnsetType | None = UNSET
-    medals: Medals | UnsetType | None = UNSET
+    medals: MedalsResponse | UnsetType | None = UNSET
     title: str | UnsetType | None = UNSET
     custom_banner: str | UnsetType | None = UNSET
 
 
-class ArchivalStatusPatchDTO(msgspec.Struct):
+class ArchivalStatusPatchRequest(Struct):
     codes: list[OverwatchCode]
     status: Literal["Archive", "Unarchived"]
 
 
-class MapReadPlaytestDTO(msgspec.Struct):
+class MapPlaytestResponse(Struct):
     thread_id: int
     vote_average: float | None
     vote_count: int | None
@@ -221,28 +228,28 @@ class MapReadPlaytestDTO(msgspec.Struct):
     completed: bool
 
 
-class MapReadDTO(msgspec.Struct):
+class MapResponse(Struct):
     id: int
     code: OverwatchCode
     map_name: OverwatchMap
     category: MapCategory
     creators: list[CreatorFull]
-    checkpoints: Annotated[int, msgspec.Meta(gt=0)]
+    checkpoints: Annotated[int, Meta(gt=0)]
     difficulty: DifficultyAll
     official: bool
     playtesting: PlaytestStatus
     archived: bool
     hidden: bool
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
+    created_at: dt.datetime
+    updated_at: dt.datetime
     ratings: float | None
-    playtest: MapReadPlaytestDTO | None
+    playtest: MapPlaytestResponse | None
     guides: list[GuideURL] | None = None
-    raw_difficulty: Annotated[float, msgspec.Meta(ge=0, le=10)] | None = None
+    raw_difficulty: Annotated[float, Meta(ge=0, le=10)] | None = None
     mechanics: list[Mechanics] = []
     restrictions: list[Restrictions] = []
     description: str | None = None
-    medals: Medals | None = None
+    medals: MedalsResponse | None = None
     title: str | None = None
     map_banner: str | None = ""
     time: float | None = None
@@ -272,50 +279,50 @@ class MapReadDTO(msgspec.Struct):
         return res.name
 
 
-class SendToPlaytestDTO(msgspec.Struct):
+class SendToPlaytestRequest(Struct):
     initial_difficulty: DifficultyAll
 
 
-class PlaytestCreatePartialDTO(msgspec.Struct):
+class PlaytestCreatePartialRequest(Struct):
     code: OverwatchCode
     initial_difficulty: DifficultyAll
 
 
-class PlaytestAssociateIDThread(msgspec.Struct):
+class PlaytestThreadAssociateRequest(Struct):
     playtest_id: int
     thread_id: int
 
 
-class PlaytestCreateDTO(msgspec.Struct):
+class PlaytestCreateRequest(Struct):
     code: OverwatchCode
     thread_id: int
     initial_difficulty: DifficultyAll
 
 
-class PlaytestReadDTO(msgspec.Struct):
+class PlaytestResponse(Struct):
     id: int
     thread_id: int | None
     code: OverwatchCode
     verification_id: int | None
     initial_difficulty: float
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
+    created_at: dt.datetime
+    updated_at: dt.datetime
     completed: bool
     thread_creation_status: Literal["pending", "processing", "success", "failed"] | None = None
     thread_creation_failure_reason: str | None = None
-    thread_creation_last_attempt_at: datetime.datetime | None = None
+    thread_creation_last_attempt_at: dt.datetime | None = None
 
 
-class PlaytestPatchDTO(msgspec.Struct):
+class PlaytestPatchRequest(Struct):
     thread_id: int | UnsetType = UNSET
     verification_id: int | UnsetType = UNSET
     completed: bool | UnsetType = UNSET
-    thread_creation_status: Literal["pending", "processing", "success", "failed"] | msgspec.UnsetType = msgspec.UNSET
-    thread_creation_failure_reason: str | None | msgspec.UnsetType = msgspec.UNSET
-    thread_creation_last_attempt_at: datetime.datetime | msgspec.UnsetType = msgspec.UNSET
+    thread_creation_status: Literal["pending", "processing", "success", "failed"] | UnsetType = UNSET
+    thread_creation_failure_reason: str | None | UnsetType = UNSET
+    thread_creation_last_attempt_at: dt.datetime | UnsetType = UNSET
 
 
-class MapReadPartialDTO(msgspec.Struct):
+class MapPartialResponse(Struct):
     map_id: int
     code: OverwatchCode
     difficulty: DifficultyAll
@@ -329,39 +336,39 @@ class MapReadPartialDTO(msgspec.Struct):
         return f"{self.code} | {self.difficulty} {self.map_name} by {self.creator_name}"[:100]
 
 
-class MessageQueueCreatePlaytest(msgspec.Struct):
+class PlaytestCreatedEvent(Struct):
     code: OverwatchCode
     playtest_id: int
 
 
-class PlaytestVote(msgspec.Struct):
+class PlaytestVote(Struct):
     difficulty: float
 
 
-class PlaytestVoteWithUser(msgspec.Struct):
+class PlaytestVoteWithUser(Struct):
     user_id: int
     name: str
     difficulty: float
 
 
-class PlaytestVotesAll(msgspec.Struct):
+class PlaytestVotesResponse(Struct):
     votes: list[PlaytestVoteWithUser]
     average: float | None
 
 
-class MapMasteryCreateDTO(msgspec.Struct):
+class MapMasteryCreateRequest(Struct):
     user_id: int
     map_name: OverwatchMap
     level: str
 
 
-class MapMasteryCreateReturnDTO(msgspec.Struct):
+class MapMasteryCreateResponse(Struct):
     map_name: OverwatchMap
     medal: str
     operation_status: Literal["inserted", "updated"]
 
 
-class MapMasteryData(msgspec.Struct):
+class MapMasteryResponse(Struct):
     map_name: OverwatchMap
     amount: int
     level: str | None = None
@@ -396,60 +403,72 @@ class MapMasteryData(msgspec.Struct):
         return f"assets/mastery/{_sanitized_map_name}_{_lowered_level}.webp"
 
 
-class PlaytestApproveCreate(msgspec.Struct):
+class PlaytestApproveRequest(Struct):
     verifier_id: int
 
 
-class PlaytestApproveMQ(PlaytestApproveCreate):
+class PlaytestApprovedEvent(Struct):
+    verifier_id: int
     difficulty: DifficultyAll
     thread_id: int
     primary_creator_id: int
     code: OverwatchCode
 
 
-class PlaytestForceAcceptCreate(msgspec.Struct):
+class PlaytestForceAcceptRequest(Struct):
     difficulty: DifficultyAll
     verifier_id: int
 
 
-class PlaytestForceAcceptMQ(PlaytestForceAcceptCreate):
+class PlaytestForceAcceptedEvent(Struct):
+    difficulty: DifficultyAll
+    verifier_id: int
     thread_id: int
 
 
-class PlaytestForceDenyCreate(msgspec.Struct):
+class PlaytestForceDenyRequest(Struct):
     verifier_id: int
     reason: str
 
 
-class PlaytestForceDenyMQ(PlaytestForceDenyCreate):
+class PlaytestForceDeniedEvent(Struct):
+    verifier_id: int
+    reason: str
     thread_id: int
 
 
-class PlaytestResetCreate(msgspec.Struct):
+class PlaytestResetRequest(Struct):
     verifier_id: int
     reason: str
     remove_votes: bool
     remove_completions: bool
 
 
-class PlaytestResetMQ(PlaytestResetCreate):
+class PlaytestResetEvent(Struct):
+    verifier_id: int
+    reason: str
+    remove_votes: bool
+    remove_completions: bool
     thread_id: int
 
 
-class PlaytestVoteCastCreate(msgspec.Struct):
+class PlaytestVoteCastRequest(Struct):
     voter_id: int
     difficulty_value: float
 
 
-class PlaytestVoteCastMQ(PlaytestVoteCastCreate):
+class PlaytestVoteCastEvent(Struct):
+    voter_id: int
+    difficulty_value: float
     thread_id: int
 
 
-class PlaytestVoteRemovedCreate(msgspec.Struct):
+class PlaytestVoteRemovedRequest(Struct):
     voter_id: int
 
 
-class PlaytestVoteRemovedMQ(PlaytestVoteRemovedCreate):
+class PlaytestVoteRemovedEvent(Struct):
+    voter_id: int
     thread_id: int
 
 
@@ -483,15 +502,15 @@ class MapCountsResponse(Struct):
     amount: int
 
 
-class QualityValueDTO(Struct):
+class QualityValueRequest(Struct):
     value: Annotated[int, Meta(ge=1, le=6)]
 
 
-class XPMultiplierDTO(Struct):
+class XPMultiplierRequest(Struct):
     value: Annotated[float, Meta(ge=1, le=10)]
 
 
-class TrendingMapReadDTO(Struct):
+class TrendingMapResponse(Struct):
     code: OverwatchCode
     map_name: OverwatchMap
     clicks: int
@@ -501,12 +520,12 @@ class TrendingMapReadDTO(Struct):
     trend_score: float
 
 
-class LinkMapsCreateDTO(Struct):
+class LinkMapsCreateRequest(Struct):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
 
 
-class UnlinkMapsCreateDTO(Struct):
+class UnlinkMapsCreateRequest(Struct):
     official_code: OverwatchCode
     unofficial_code: OverwatchCode
     reason: str

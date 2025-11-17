@@ -1,13 +1,24 @@
-import datetime
+import datetime as dt
 from typing import Annotated, Literal
 
 from msgspec import UNSET, Meta, Struct, UnsetType
 
 from .difficulties import DifficultyAll, DifficultyTop
+from .internal import JobStatusResponse
 from .maps import GuideURL, MedalType, OverwatchCode, OverwatchMap
 
 
-class CompletionCreateDTO(Struct):
+class CompletionSubmissionJobResponse(Struct):
+    job_status: JobStatusResponse | None
+    completion_id: int
+
+
+class UpvoteSubmissionJobResponse(Struct):
+    job_status: JobStatusResponse | None
+    upvotes: int | None
+
+
+class CompletionCreateRequest(Struct):
     code: OverwatchCode
     user_id: int
     time: float
@@ -15,7 +26,7 @@ class CompletionCreateDTO(Struct):
     video: GuideURL | None
 
 
-class CompletionReadDTO(Struct):
+class CompletionResponse(Struct):
     code: OverwatchCode
     user_id: int
     name: str
@@ -37,7 +48,7 @@ class CompletionReadDTO(Struct):
     upvotes: int = 0
 
 
-class CompletionSubmissionReadDTO(Struct):
+class CompletionSubmissionResponse(Struct):
     id: int
     user_id: int
     time: float
@@ -45,7 +56,7 @@ class CompletionSubmissionReadDTO(Struct):
     video: GuideURL | None
     verified: bool
     completion: bool
-    inserted_at: datetime.datetime
+    inserted_at: dt.datetime
     code: OverwatchCode
     difficulty: DifficultyAll
     map_name: OverwatchMap
@@ -59,7 +70,7 @@ class CompletionSubmissionReadDTO(Struct):
     suspicious: bool
 
 
-class CompletionPatchDTO(Struct):
+class CompletionPatchRequest(Struct):
     message_id: int | UnsetType = UNSET
     completion: bool | UnsetType = UNSET
     verification_id: int | UnsetType = UNSET
@@ -68,27 +79,27 @@ class CompletionPatchDTO(Struct):
     wr_xp_check: bool | UnsetType = UNSET
 
 
-class WorldRecordXPCheckReadDTO(Struct):
+class WorldRecordXPCheckResponse(Struct):
     code: OverwatchCode
     user_id: int
 
 
-class CompletionVerificationPutDTO(Struct):
+class CompletionVerificationUpdateRequest(Struct):
     verified_by: int
     verified: bool
     reason: str | None
 
 
-class PendingVerification(Struct):
+class PendingVerificationResponse(Struct):
     id: int
     verification_id: int
 
 
-class MessageQueueCompletionsCreate(Struct):
+class CompletionCreatedEvent(Struct):
     completion_id: int
 
 
-class MessageQueueVerificationChange(Struct):
+class VerificationChangedEvent(Struct):
     completion_id: int
     verified: bool
     verified_by: int
@@ -98,7 +109,7 @@ class MessageQueueVerificationChange(Struct):
 SuspiciousFlag = Literal["Cheating", "Scripting"]
 
 
-class SuspiciousCompletionWriteDTO(Struct):
+class SuspiciousCompletionCreateRequest(Struct):
     context: str
     flag_type: SuspiciousFlag
     flagged_by: int
@@ -106,7 +117,7 @@ class SuspiciousCompletionWriteDTO(Struct):
     verification_id: int | None = None
 
 
-class SuspiciousCompletionReadDTO(Struct):
+class SuspiciousCompletionResponse(Struct):
     id: int
     user_id: int
     context: str
@@ -116,14 +127,14 @@ class SuspiciousCompletionReadDTO(Struct):
     flagged_by: int
 
 
-class UpvoteCreateDTO(Struct):
+class UpvoteCreateRequest(Struct):
     user_id: int
     message_id: int
 
 
 class MapRecordProgressionResponse(Struct):
     time: float
-    inserted_at: datetime.datetime
+    inserted_at: dt.datetime
 
 
 class TimePlayedPerRankResponse(Struct):
@@ -131,12 +142,12 @@ class TimePlayedPerRankResponse(Struct):
     difficulty: DifficultyTop
 
 
-class UpvoteUpdateDTO(Struct):
+class UpvoteUpdateRequest(Struct):
     user_id: int
     message_id: int
 
 
-class QualityUpdateDTO(Struct):
+class QualityUpdateRequest(Struct):
     user_id: int
     quality: Annotated[int, Meta(ge=1, le=6)]
 
@@ -151,7 +162,7 @@ class CamelConfig(Struct, rename=to_camel):
     """Base struct that renames fields to camelCase during encoding/decoding."""
 
 
-class ExtractedTexts(CamelConfig):
+class ExtractedTextsResponse(CamelConfig):
     top_left: str | None
     top_left_white: str | None
     top_left_cyan: str | None
@@ -160,22 +171,22 @@ class ExtractedTexts(CamelConfig):
     bottom_left: str | None
 
 
-class ExtractedResult(CamelConfig):
+class ExtractedResultResponse(CamelConfig):
     name: str | None
     time: float | None
     code: str | None
-    texts: ExtractedTexts
+    texts: ExtractedTextsResponse
 
 
-class OcrApiResponse(CamelConfig):
-    extracted: ExtractedResult
+class OcrResponse(CamelConfig):
+    extracted: ExtractedResultResponse
 
 
-class FailedAutoverifyMessage(Struct):
+class FailedAutoverifyEvent(Struct):
     submitted_code: OverwatchCode
     submitted_time: float
     user_id: int
-    extracted: ExtractedResult
+    extracted: ExtractedResultResponse
     code_match: bool
     time_match: bool
     user_match: bool

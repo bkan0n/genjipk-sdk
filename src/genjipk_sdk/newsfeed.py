@@ -5,8 +5,8 @@ from typing import Literal
 
 import msgspec
 
-from genjipk_sdk.difficulties import DifficultyAll
-
+from .difficulties import DifficultyAll
+from .internal import JobStatusResponse
 from .maps import GuideURL, MedalType, OverwatchCode, OverwatchMap, get_map_banner
 
 NewsfeedEventType = Literal[
@@ -166,5 +166,10 @@ class NewsfeedEvent(msgspec.Struct, kw_only=True):
     total_results: int | None = None
 
 
-class NewsfeedQueueMessage(msgspec.Struct, kw_only=True):
+class NewsfeedDispatchEvent(msgspec.Struct, kw_only=True):
+    newsfeed_id: int
+
+
+class PublishNewsfeedJobResponse(msgspec.Struct):
+    job_status: JobStatusResponse
     newsfeed_id: int

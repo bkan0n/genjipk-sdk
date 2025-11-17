@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import Literal
 
 from msgspec import Struct
@@ -29,9 +29,9 @@ class LootboxKeyTypeResponse(Struct):
     name: str
 
 
-class UserRewardsResponse(Struct):
+class UserRewardResponse(Struct):
     user_id: int
-    earned_at: datetime.datetime
+    earned_at: dt.datetime
     name: str
     type: str
     rarity: str
@@ -66,6 +66,6 @@ def _reward_url(type_: str, name: str) -> str:
     return url
 
 
-class UserLootboxKeyAmountsResponse(Struct):
+class UserLootboxKeyAmountResponse(Struct):
     key_type: LootboxKeyType
     amount: int

@@ -14,19 +14,19 @@ XP_AMOUNTS: dict[XP_TYPES, int] = {
 }
 
 
-class XpGrantResult(Struct):
+class XpGrantResponse(Struct):
     """Return payload when XP is granted."""
 
     previous_amount: int
     new_amount: int
 
 
-class XpGrant(Struct):
+class XpGrantRequest(Struct):
     amount: int
     type: XP_TYPES
 
 
-class TierChange(Struct):
+class TierChangeResponse(Struct):
     """Computed tier deltas between old and new XP."""
 
     old_xp: int
@@ -52,7 +52,7 @@ class PlayersPerSkillTierResponse(Struct):
     amount: int
 
 
-class XpGrantMQ(Struct):
+class XpGrantEvent(Struct):
     user_id: int
     amount: int
     type: XP_TYPES

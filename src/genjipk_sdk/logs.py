@@ -6,14 +6,14 @@ from msgspec import Struct
 from .maps import OverwatchCode
 
 
-class LogCreateDTO(Struct):
+class LogCreateRequest(Struct):
     command_name: str
     user_id: int
     created_at: dt.datetime
     namespace: dict
 
 
-class MapClickCreateDTO(Struct):
+class MapClickCreateRequest(Struct):
     code: OverwatchCode
     ip_address: str
     user_id: int | None
