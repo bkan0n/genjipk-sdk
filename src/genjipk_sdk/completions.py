@@ -28,7 +28,7 @@ __all__ = (
     "TimePlayedPerRankResponse",
     "UpvoteCreateRequest",
     "UpvoteSubmissionJobResponse",
-    "UpvoteUpdateRequest",
+    "UpvoteUpdateEvent",
     "VerificationChangedEvent",
     "WorldRecordXPCheckResponse",
 )
