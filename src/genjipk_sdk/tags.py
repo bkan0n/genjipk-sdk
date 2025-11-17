@@ -3,6 +3,28 @@ from typing import Literal
 import msgspec
 from msgspec import Struct
 
+__all__ = (
+    "OpAlias",
+    "OpBase",
+    "OpClaim",
+    "OpCreate",
+    "OpEdit",
+    "OpIncrementUsage",
+    "OpPurge",
+    "OpRemove",
+    "OpRemoveById",
+    "OpTransfer",
+    "TagOp",
+    "TagRowDTO",
+    "TagsAutocompleteRequest",
+    "TagsAutocompleteResponse",
+    "TagsMutateRequest",
+    "TagsMutateResponse",
+    "TagsMutateResult",
+    "TagsSearchFilters",
+    "TagsSearchResponse",
+)
+
 
 class TagsSearchFilters(Struct, omit_defaults=True):
     guild_id: int
