@@ -168,7 +168,7 @@ class TimePlayedPerRankResponse(Struct):
     difficulty: DifficultyTop
 
 
-class UpvoteUpdateRequest(Struct):
+class UpvoteUpdateEvent(Struct):
     user_id: int
     message_id: int
 
