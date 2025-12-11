@@ -361,10 +361,17 @@ class MapEditResponse(Struct, kw_only=True):
     fields: MapEditChangesResponse
     reason: str
     created_at: dt.datetime
-    complated_at: dt.datetime
+    completed_at: dt.datetime
     accepted_by: int
     accepted: bool | None
     message_id: int
+
+
+class MapEditPatchRequest(Struct, kw_only=True):
+    completed_at: dt.datetime | UnsetType = UNSET
+    accepted_by: int | UnsetType = UNSET
+    accepted: bool | None | UnsetType = UNSET
+    message_id: int | UnsetType = UNSET
 
 
 class ArchivalStatusPatchRequest(Struct):
