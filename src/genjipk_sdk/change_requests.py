@@ -19,6 +19,17 @@ ChangeRequestType = Literal[
 
 
 class ChangeRequestCreateRequest(Struct):
+    """Payload for creating a change request.
+
+    Attributes:
+        thread_id: Discord thread identifier where the request is tracked.
+        user_id: Identifier of the user submitting the request.
+        code: Overwatch workshop code for the associated map.
+        content: Freeform description of the requested change.
+        change_request_type: Category describing the request type.
+        creator_mentions: Mention string for notifying map creators.
+    """
+
     thread_id: int
     user_id: int
     code: str
@@ -28,6 +39,19 @@ class ChangeRequestCreateRequest(Struct):
 
 
 class ChangeRequestResponse(Struct):
+    """Represents a persisted change request entry.
+
+    Attributes:
+        thread_id: Discord thread identifier where the request is tracked.
+        user_id: Identifier of the user that opened the request.
+        code: Overwatch workshop code for the associated map.
+        content: Description of the requested change.
+        change_request_type: Category describing the request type.
+        creator_mentions: Mention string for notifying map creators, if any.
+        alerted: Whether the request has been surfaced to moderators or staff.
+        resolved: Whether the change request has been completed.
+    """
+
     thread_id: int
     user_id: int
     code: str
@@ -39,6 +63,14 @@ class ChangeRequestResponse(Struct):
 
 
 class StaleChangeRequestResponse(Struct):
+    """Old change request that needs follow-up.
+
+    Attributes:
+        thread_id: Discord thread identifier for the stale request.
+        user_id: Identifier of the user who created the request.
+        creator_mentions: Mention string for notifying map creators.
+    """
+
     thread_id: int
     user_id: int
     creator_mentions: str
