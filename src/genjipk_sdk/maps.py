@@ -362,6 +362,9 @@ class MapEditResponse(Struct, kw_only=True):
     reason: str
     created_at: dt.datetime
     complated_at: dt.datetime
+    accepted_by: int
+    accepted: bool | None
+    message_id: int
 
 
 class ArchivalStatusPatchRequest(Struct):
