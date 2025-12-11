@@ -337,6 +337,33 @@ class MapEditRequestPatchRequest(Struct, kw_only=True):
     custom_banner: str | UnsetType | None = UNSET
 
 
+class MapEditChangesResponse(Struct, kw_only=True):
+    code: OverwatchCode | None = None
+    map_name: OverwatchMap | None = None
+    category: MapCategory | None = None
+    creators: list[Creator] | None = None
+    checkpoints: Annotated[int, Meta(gt=0)] | None = None
+    difficulty: DifficultyAll | None = None
+    hidden: bool | None = None
+    archived: bool | None = None
+    mechanics: list[Mechanics] | None = None
+    restrictions: list[Restrictions] | None = None
+    description: str | None = None
+    medals: MedalsResponse | None = None
+    title: str | None = None
+    custom_banner: str | None = None
+
+
+class MapEditResponse(Struct, kw_only=True):
+    id: int
+    map_id: int
+    code: OverwatchCode
+    fields: MapEditChangesResponse
+    reason: str
+    created_at: dt.datetime
+    complated_at: dt.datetime
+
+
 class ArchivalStatusPatchRequest(Struct):
     """Bulk update for map archival status.
 
