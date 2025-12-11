@@ -367,11 +367,13 @@ class MapEditResponse(Struct, kw_only=True):
     message_id: int
 
 
-class MapEditPatchRequest(Struct, kw_only=True):
-    completed_at: dt.datetime | UnsetType = UNSET
-    accepted_by: int | UnsetType = UNSET
-    accepted: bool | None | UnsetType = UNSET
-    message_id: int | UnsetType = UNSET
+class MapEditSetMessageIdRequest(Struct, kw_only=True):
+    message_id: int
+
+
+class MapEditResolveRequest(Struct, kw_only=True):
+    accepted: bool
+    accepted_by: int
 
 
 class ArchivalStatusPatchRequest(Struct):
