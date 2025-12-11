@@ -1,6 +1,6 @@
 [project]
 name = "genjipk-sdk"
-version = "2.4.0"
+version = "2.4.1"
 description = "A command library for Genji Parkour services."
 readme = "README.md"
 authors = [
