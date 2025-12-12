@@ -317,10 +317,11 @@ class MapPatchRequest(Struct, kw_only=True):
     custom_banner: str | UnsetType | None = UNSET
 
 
-class MapEditRequestPatchRequest(Struct, kw_only=True):
+class MapEditCreateRequest(Struct, kw_only=True):
     """Partial update payload for map edit request entries."""
 
-    reason: str = ""
+    reason: str
+    created_by: int
     code: OverwatchCode | UnsetType = UNSET
     map_name: OverwatchMap | UnsetType = UNSET
     category: MapCategory | UnsetType = UNSET
@@ -365,6 +366,8 @@ class MapEditResponse(Struct, kw_only=True):
     accepted_by: int
     accepted: bool | None
     message_id: int
+    created_by: int
+    rejection_reason: str | None
 
 
 class MapEditSetMessageIdRequest(Struct, kw_only=True):
@@ -374,6 +377,7 @@ class MapEditSetMessageIdRequest(Struct, kw_only=True):
 class MapEditResolveRequest(Struct, kw_only=True):
     accepted: bool
     accepted_by: int
+    rejection_reason: str | None = None
 
 
 class ArchivalStatusPatchRequest(Struct):
